@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ramida Penuka — Logistics Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ── RESET & TOKENS ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+
+body{
+  background:#080809;
+  /* Engineering Grid Pattern */
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-size: 40px 40px;
+  background-attachment: fixed;
+  
+  color:#f2f2f5;
+  font-family:'Geist','Inter',sans-serif;
+  overflow-x:hidden;cursor:none;
+}
+
+:root{
+  --bg:#080809;--surface:rgba(255,255,255,0.03);
+  --border:rgba(255,255,255,0.07);
+  --t1:#f2f2f5;--t2:#a1a1aa;
+  --t3:#71717a; 
+  --violet:#7c5cfc;--blue:#00d2ff;
+  
+  --blue-grad: linear-gradient(
+    90deg, 
+    #00d2ff 0%, 
+    #ffffff 25%, 
+    #00d2ff 50%, 
+    #050505 75%, 
+    #00d2ff 100%
+  );
+}
+
+/* ── REFINED ENGINEERING CURSOR ── */
+#cur {
+  position: fixed; top: 0; left: 0;
+  width: 6px; height: 6px;
+  background: var(--blue);
+  border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, box-shadow 0.3s;
+}
+
+#ring {
+  position: fixed; top: 0; left: 0;
+  width: 38px; height: 38px;
+  border: 1.5px dashed rgba(0, 210, 255, 0.4);
+  border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, border 0.3s, transform 0.1s ease-out;
+  animation: rotateHUD 8s linear infinite;
+}
+
+@keyframes rotateHUD { 
+  from { transform: translate(-50%, -50%) rotate(0deg); } 
+  to { transform: translate(-50%, -50%) rotate(360deg); } 
+}
+
+/* ── SHIMMER ANIMATIONS ── */
+.shimmer-text {
+  background: linear-gradient(135deg,#f2f2f5 0%,#c4b5fd 38%,#818cf8 65%,#f2f2f5 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: shimmer 8s linear infinite;
+  font-weight: 700;
+}
+.blue-shimmer {
+  background: var(--blue-grad);
+  background-size: 300% auto; 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
+  animation: sweep 6s ease-in-out infinite; 
+}
+@keyframes shimmer{ to{background-position: 200% center;} }
+@keyframes sweep { 0% { background-position: 0% center; } 100% { background-position: 300% center; } }
+
+/* ── LAYOUT ── */
+.container{max-width:1400px; margin:0 auto; padding:4vh 2.5rem;} 
+
+.bento{display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;}
+
+.gc{
+  background:var(--surface); border:1px solid var(--border); border-radius:24px;
+  padding:2.5rem; position:relative; overflow:hidden; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  backdrop-filter: blur(12px);
+}
+.gc:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-4px); }
+
+.span2{grid-column:span 2;}
+.span3{grid-column:span 3;}
+
+/* ── SPOTLIGHT ── */
+.spot {
+  position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .5s;
+  background:radial-gradient(450px circle at var(--mx,50%) var(--my,50%),rgba(124,92,252,0.08),transparent 70%);
+}
+.gc:hover .spot { opacity:1; }
+
+/* ── COMPONENTS ── */
+.eyebrow{
+  font-size:.75rem; font-weight: 600; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--t3); margin-bottom:1.2rem; display:block;
+}
+.h-lg{font-size:1.8rem; font-weight:600; margin-bottom:1.5rem; color:var(--t1);}
+.body-sm{font-size:1rem; line-height:1.6; color:var(--t2);}
+
+.badge{
+  display:inline-flex; padding:6px 14px; border-radius:99px; font-size:.75rem;
+  background:rgba(255,255,255,0.03); border:1px solid var(--border); color:var(--t1);
+  margin-right:8px; margin-bottom:10px; transition: 0.2s;
+}
+.badge:hover { background: rgba(0, 210, 255, 0.1); border-color: var(--blue); }
+
+.highlight-badge{
+  display:inline-flex; padding:4px 12px; border-radius:99px; font-size:.75rem; font-weight:600;
+  background:rgba(124,92,252,0.1); border:1px solid rgba(124,92,252,0.2); color:#c4b5fd;
+}
+
+.edu-item { display: flex; gap: 16px; align-items: flex-start; }
+.edu-icon { width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0; }
+
+@media(max-width:1024px){
+  .bento{grid-template-columns:1fr;}
+  .span2,.span3{grid-column:span 1;}
+  .container{padding:2rem;}
+}
+</style>
+</head>
+<body>
+
+<div style="position: fixed; top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(124, 92, 252, 0.03) 0%, transparent 70%); z-index: -1; pointer-events: none;"></div>
+<div style="position: fixed; bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(0, 210, 255, 0.03) 0%, transparent 70%); z-index: -1; pointer-events: none;"></div>
+
+<div id="cur"></div>
+<div id="ring"></div>
+
+<section class="container" style="padding-top:10rem; padding-bottom:4rem;">
+  <span class="eyebrow">— Portfolio 2026 —</span>
+  <h1 style="font-size:clamp(3.5rem,10vw,6.5rem); letter-spacing:-.05em; line-height:1;">
+    <span class="shimmer-text">Ramida Penuka.</span>
+  </h1>
+  <p class="body-sm" style="font-size:1.4rem; max-width:800px; margin-top:2rem; color:var(--t1);">
+    Transport Management & Logistics Engineering Undergraduate. 
+    Synthesizing engineering precision with data analytics to optimize global supply chains.
+  </p>
+</section>
+
+<div class="container" style="padding-top: 0;">
+  <div class="bento">
+    
+    <div class="gc span2">
+      <div class="spot"></div>
+      <span class="eyebrow">Academic Qualifications</span>
+      <h3 class="h-lg blue-shimmer">Education & Credentials</h3>
+      
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:32px;">
+        <div class="edu-item">
+          <svg class="edu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          <div>
+            <p style="font-weight:600; color:var(--t1); font-size:1.1rem; line-height:1.3;">BSc Eng Hons in Transport Management & Logistics Engineering</p>
+            <p class="body-sm">University of Moratuwa</p>
+            <div class="highlight-badge" style="margin-top:10px;">2028 Graduate </div>
+          </div>
+        </div>
+        
+        <div class="edu-item">
+          <svg class="edu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <div>
+            <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">Physics (A), Maths (B), Chemistry (B)</p>
+            <p class="body-sm">Royal College, Colombo 07</p>
+            <div class="highlight-badge" style="margin-top:10px;">2022 A/L </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border);" class="edu-item">
+         <svg class="edu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+         <div>
+            <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">CIMA OCS Exams (Reading)</p>
+            <div class="highlight-badge" style="margin-top:10px;">Expected 2026 </div>
+         </div>
+      </div>
+    </div>
+
+    <div class="gc">
+      <div class="spot"></div>
+      <span class="eyebrow">Expertise</span>
+      <h3 class="h-lg blue-shimmer">Technical Toolbox</h3>
+      <div style="margin-top:0.5rem; display: flex; flex-wrap: wrap;">
+        <span class="badge">Python</span>
+        <span class="badge">Advanced Excel</span>
+        <span class="badge">Cargowise Operator</span>
+        <span class="badge">Project Coordination</span>
+        <span class="badge">Power BI</span>
+        <span class="badge">Supply Chain Modeling</span>
+      </div>
+    </div>
+
+    <div class="gc span3">
+      <div class="spot"></div>
+      <span class="eyebrow">Technical Engineering</span>
+      <h3 class="h-lg blue-shimmer">Systems & Automation</h3>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:20px;">
+        
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <p style="color:var(--blue); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">EXPORT LOGISTICS</p>
+            <span class="highlight-badge" style="font-size: 0.65rem;">Group Project</span>
+          </div>
+          <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Garumuni Export Co. Improvement</p>
+          <p class="body-sm">Optimized export workflows and procurement strategies to streamline international distribution and reduce lead times.</p>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <p style="color:var(--blue); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">PORT AUTOMATION</p>
+            <span class="highlight-badge" style="font-size: 0.65rem;">Group Project</span>
+          </div>
+          <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Prime Mover Process Automation</p>
+          <p class="body-sm">Designed an automated framework for prime mover movements at the port terminal, focusing on reducing idle time and increasing efficiency.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="gc span3">
+      <div class="spot"></div>
+      <span class="eyebrow">Professional Experience</span>
+      <h3 class="h-lg blue-shimmer">Projects & Impact</h3>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:20px;">
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px;">
+          <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">CHAIR PERSON</p>
+          <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Data Storm v6.0 - OCTAVE</p>
+          <p class="body-sm">Led industry collaboration with <span style="color: var(--blue); border-bottom: 1px solid rgba(0, 210, 255, 0.3); font-weight: 500;">John Keells Holdings</span> to deliver high-impact data analytics competitions.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px;">
+          <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">PROJECT LEADER</p>
+          <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Library Renovation - Atlas Axillia</p>
+          <p class="body-sm">Managed end-to-end renovation project for Atlas Axillia, a subsidiary of <span style="color: var(--blue); border-bottom: 1px solid rgba(0, 210, 255, 0.3); font-weight: 500;">Hemas Holdings</span>.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px;">
+          <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">FINANCE LEAD</p>
+          <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Project Rhythm Devine</p>
+          <p class="body-sm">Ensured rigorous financial transparency and budget control for large-scale logistics-focused initiatives.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px;">
+          <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">LEADERSHIP</p>
+          <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Officially Inducted Member - Rotaract Club</p>
+          <p class="body-sm">Officially inducted based on consistent dedication; actively cultivating <strong>leadership and teamwork</strong> through community-driven logistics.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="container" style="text-align:center; padding-top:8rem; padding-bottom:8rem;">
+  <p class="shimmer-text" style="font-size:1.8rem;">Connecting Systems, Data, and People.</p>
+  <p class="body-sm" style="margin-top:1.5rem; font-size: 1rem;">Igrpenuka@gmail.com • Kesbewa, Sri Lanka</p>
+</footer>
+
+<script>
+const cur=document.getElementById('cur'), ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+
+(function anim(){
+  rx+=(mx-rx)*.15; ry+=(my-ry)*.15;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(anim);
+})();
+
+document.querySelectorAll('.gc').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${((e.clientX-r.left)/r.width*100).toFixed(1)}%`);
+    card.style.setProperty('--my', `${((e.clientY-r.top)/r.height*100).toFixed(1)}%`);
+    
+    cur.style.width = '12px'; 
+    cur.style.height = '12px';
+    cur.style.boxShadow = '0 0 20px 5px rgba(0, 210, 255, 0.8)';
+    
+    ring.style.width = '65px'; 
+    ring.style.height = '65px';
+    ring.style.border = '2px dashed rgba(0, 210, 255, 0.9)';
+  });
+  
+  card.addEventListener('mouseleave', () => {
+    cur.style.width = '6px'; 
+    cur.style.height = '6px';
+    cur.style.boxShadow = 'none';
+    
+    ring.style.width = '38px'; 
+    ring.style.height = '38px';
+    ring.style.border = '1.5px dashed rgba(0, 210, 255, 0.4)';
+  });
+});
+</script>
+</body>
+</html>
