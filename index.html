@@ -235,6 +235,20 @@ body{
 
   footer { padding-top: 4rem !important; padding-bottom: 4rem !important; }
 }
+
+/* Specific override for the name on small mobile screens */
+@media (max-width: 600px) {
+  h1.animate-name {
+    font-size: 2.2rem !important; /* Forces a smaller size on mobile */
+    white-space: nowrap !important; /* Prevents the name from breaking into two lines */
+    letter-spacing: -0.02em !important;
+  }
+  
+  .shimmer-text {
+    display: inline-block; /* Helps with nowrap rendering */
+  }
+}
+
 </style>
 </head>
 <body>
@@ -245,7 +259,7 @@ body{
 <div class="main-wrapper">
   <section class="container" style="padding-top:8rem; padding-bottom:4rem;">
     <div class="profile-box animate-eyebrow">
-      <img src="profile.jpg" alt="Ramida Penuka">
+      <img src="images/profile.jpg" alt="Ramida Penuka">
     </div>
 
     <div class="status-indicator animate-eyebrow" style="margin-bottom: 1.5rem;">
