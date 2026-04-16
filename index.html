@@ -31,14 +31,24 @@ body{
   width: 100%;
 }
 
-/* ── ZOOM WRAPPER (Desktop Only) ── */
-@media (min-width: 1025px) {
-  .main-wrapper {
-    transform: scale(0.9); 
-    transform-origin: top center;
-    width: 100%;
-    margin-bottom: -5vh;
-  }
+/* ── FOCUS BLUR OVERLAY ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 3, 4, 0.09); 
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  pointer-events: none;
+  z-index: 500; 
+  opacity: 0;
+  transition: opacity 0.5s ease, backdrop-filter 0.5s ease;
+}
+
+body.focus-mode::after {
+  opacity: 1;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* ── STATUS INDICATOR ── */
@@ -84,6 +94,7 @@ body{
   letter-spacing: 0.02em;
 }
 
+
 /* ── CURSOR ── */
 @media (pointer: coarse) {
   body { cursor: auto; }
@@ -103,6 +114,46 @@ body{
   animation: rotateHUD 8s linear infinite;
 }
 @keyframes rotateHUD { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* ── LOCKED-LEFT PFP ZOOM ── */
+.profile-box { 
+  width: 100px; 
+  height: 100px; 
+  border-radius: 50%; /* Changed from 28px to 50% */
+  position: relative; 
+  margin-bottom: 2rem; 
+  background: var(--surface); 
+  z-index: 10;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.2s ease !important;
+  transform: scale(1.15);
+  transform-origin: left top;
+  will-change: transform;
+}
+
+.name-entrance-wrapper {
+  opacity: 0;
+  animation: fadeInUpBlur 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+/* Remove the fadeInUpBlur from .shimmer-text so they don't fight */
+.shimmer-text {
+  background: linear-gradient(90deg, #f2f2f5 0%, #f2f2f5 40%, #c4b5fd 50%, #746dff 60%, #f2f2f5 100%);
+  background-size: 400% auto; 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 12s linear infinite; 
+}
+
+.profile-box:hover {
+  transform: scale(4); 
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.profile-box:hover img {
+  border-color: var(--blue);
+  box-shadow: 20px 20px 60px rgba(0, 210, 255, 0.4); 
+}
 
 /* ── ANIMATIONS ── */
 @keyframes fadeInUpBlur {
@@ -133,8 +184,6 @@ body{
   will-change: background-position;
 }
 
-.animate-eyebrow { opacity: 0; animation: fadeInUpBlur 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-.hero-fade { opacity: 0; animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s forwards; }
 
 .gc {
   opacity: 0;
@@ -147,12 +196,24 @@ body{
 /* ── BENTO SYSTEM ── */
 .container{max-width:1400px; margin:0 auto; padding:4vh 2.5rem;} 
 .bento{display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;}
-.gc{
-  background:var(--surface); border:1px solid var(--border); border-radius:24px;
-  padding:2.5rem; position:relative; overflow:hidden;
+.gc {
+  background: 
+    radial-gradient(circle at bottom left, rgba(85, 43, 255, 0.098) 10%, rgba(85, 43, 255, 0.098) 10%, transparent 50%),
+    var(--surface);
+  border: 1px solid var(--border); 
+  border-radius: 24px;
+  padding: 2.5rem; 
+  position: relative; 
+  overflow: hidden;
   backdrop-filter: blur(16px);
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(10px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.8s ease, border-color 0.4s ease;
 }
-.gc:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-4px) !important; }
+
+.gc.reveal { opacity: 1; transform: translateY(0); filter: blur(0px); }
+.gc:hover { border-color: rgba(124, 92, 252, 0.25); transform: translateY(-4px) !important; }
 .span2{grid-column:span 2;}
 .span3{grid-column:span 3;}
 
@@ -239,7 +300,7 @@ body{
 /* Specific override for the name on small mobile screens */
 @media (max-width: 600px) {
   h1.animate-name {
-    font-size: 2.2rem !important; /* Forces a smaller size on mobile */
+    font-size: 2.5rem !important; /* Forces a smaller size on mobile */
     white-space: nowrap !important; /* Prevents the name from breaking into two lines */
     letter-spacing: -0.02em !important;
   }
@@ -249,37 +310,108 @@ body{
   }
 }
 
+/* ── ADJUSTABLE HERO QUOTE ── */
+.hero-quote-adjustable {
+  position: absolute;
+  top: var(--top);
+  right: var(--right);
+  width: var(--width);
+  text-align: right;
+  z-index: 5;
+  pointer-events: none; /* Allows clicks to pass through if overlapping */
+}
+
+.q-main {
+  font-family: 'Geist Mono', monospace;
+  font-size: var(--size);
+  font-weight: var(--weight);
+  letter-spacing: var(--ls);
+  color: var(--color);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.q-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.q-line {
+  width: 30px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+
+.q-author {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+}
+
+/* Auto-hide on mobile to prevent overlap with the name */
+@media (max-width: 1024px) {
+  .hero-quote-adjustable { display: none; }
+}
+
+
 </style>
 </head>
 <body>
+
+
 
 <div id="cur"></div>
 <div id="ring"></div>
 
 <div class="main-wrapper">
-  <section class="container" style="padding-top:8rem; padding-bottom:4rem;">
+  <section class="container" style="padding-top:3rem; padding-bottom:3rem;">
     <div class="profile-box animate-eyebrow">
-      <img src="images/profile.jpg" alt="Ramida Penuka">
+      <img src="profile.jpg" alt="Ramida Penuka">
     </div>
 
-    <div class="status-indicator animate-eyebrow" style="margin-bottom: 1.5rem;">
+    <div class="hero-quote-adjustable hero-fade" 
+        style="--top: 3.15rem; 
+            --right: 10.6rem; 
+            --width: 300px; 
+            --size: 1rem; 
+            --weight: 400; 
+            --ls: 0.02em; 
+            --color: var(--t2); 
+            --accent: var(--blue);">
+            
+      <p class="q-main">"Visual harmony is the quietest form of efficiency; when a system achieves clarity, its logic becomes easier to understand."</p>
+      <div class="q-footer">
+        <span class="q-line"></span>
+        <span class="q-author">Ramida Penuka</span>
+      </div>
+    </div>
+
+    <div class="status-indicator animate-eyebrow" style="margin-bottom: 1rem;">
       <span class="dot"></span>
       <span class="status-text">Open for work</span>
     </div>
 
     <span class="eyebrow animate-eyebrow">— Portfolio 2026 —</span>
-    <h1 class="animate-name" style="font-size:clamp(3.5rem,10vw,6.5rem); letter-spacing:-.05em; line-height:1.1;">
-      <span class="shimmer-text">Ramida Penuka </span>
-    </h1>
-    <p class="body-sm hero-fade" style="font-size:clamp(1.1rem, 3vw, 1.4rem); max-width:800px; margin-top:2rem; color:var(--t1);">
-      Transport Management & Logistics Engineering Undergraduate. 
-      Synthesizing engineering precision with data analytics to optimize global supply chains.
-    </p>
+      <div class="name-entrance-wrapper">
+        <h1 class="animate-name" style="font-size:clamp(3.5rem,10vw,6.5rem); letter-spacing:-.05em; line-height:1.1;">
+          <span class="shimmer-text">Ramida Penuka </span>
+
+          <p class="body-sm hero-fade" style="font-size:clamp(1.1rem, 3vw, 1.2rem); max-width:900px; margin-top:1rem; color: rgb(150, 150, 150); letter-spacing: 0.03em;">
+            Transport Management & Logistics Engineering Undergraduate.<br>
+            Synthesizing engineering precision with data analytics to optimize global supply chains.
+          </p>
+        </h1>
+      </div>
+    
   </section>
 
   <div class="container" style="padding-top: 0;">
-    <div class="bento">
-      
+    <div class="bento">      
       <div class="gc span2">
         <div class="spot"></div>
         <span class="eyebrow">Academic Qualifications</span>
@@ -438,6 +570,14 @@ document.addEventListener('mousemove',e=>{
   ring.style.left=rx+'px'; ring.style.top=ry+'px';
   requestAnimationFrame(anim);
 })();
+
+
+// --- PFP FOCUS MODE ---
+const profileBox = document.querySelector('.profile-box');
+profileBox.addEventListener('mouseenter', () => document.body.classList.add('focus-mode'));
+profileBox.addEventListener('mouseleave', () => document.body.classList.remove('focus-mode'));
+
+
 
 /* ── INTERACTIVE HOVER ── */
 document.querySelectorAll('.gc').forEach(card=>{
