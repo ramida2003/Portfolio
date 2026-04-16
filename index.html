@@ -12,6 +12,14 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
 
+:root{
+  --bg:#080848;--surface:rgba(52, 40, 93, 0.185);
+  --border:rgba(255,255,255,0.07);
+  --t1:#f2f2f5;--t2:#a1a1aa;
+  --t3:#ffffff; 
+  --violet:#7c5cfc;--blue:#00d2ff;
+}
+
 body{
   background:#080809;
   background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
@@ -23,7 +31,60 @@ body{
   width: 100%;
 }
 
-/* Hide custom cursor on mobile/touch */
+/* ── ZOOM WRAPPER (Desktop Only) ── */
+@media (min-width: 1025px) {
+  .main-wrapper {
+    transform: scale(0.9); 
+    transform-origin: top center;
+    width: 100%;
+    margin-bottom: -5vh;
+  }
+}
+
+/* ── STATUS INDICATOR ── */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(34, 197, 94, 0.08); 
+  padding: 6px 14px;
+  border-radius: 99px;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  width: fit-content;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: #22c55e;
+  animation: statusPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes statusPulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  70% { transform: scale(3); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+.status-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4ade80;
+  letter-spacing: 0.02em;
+}
+
+/* ── CURSOR ── */
 @media (pointer: coarse) {
   body { cursor: auto; }
   #cur, #ring { display: none; }
@@ -32,48 +93,6 @@ body{
   body { cursor: none; }
 }
 
-:root{
-  --bg:#080809;--surface:rgba(255,255,255,0.03);
-  --border:rgba(255,255,255,0.07);
-  --t1:#f2f2f5;--t2:#a1a1aa;
-  --t3:#71717a; 
-  --violet:#7c5cfc;--blue:#00d2ff;
-}
-
-/* ── ANIMATIONS ── */
-@keyframes fadeInUpBlur {
-  from { opacity: 0; transform: translateY(40px); filter: blur(15px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0px); }
-}
-@keyframes shimmer { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
-@keyframes sweep { 0% { background-position: 100% center; } 100% { background-position: -100% center; } }
-
-.shimmer-text {
-  background: linear-gradient(135deg, #f2f2f5 0%, #c4b5fd 25%, #818cf8 50%, #c4b5fd 75%, #f2f2f5 100%);
-  background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  animation: shimmer 12s linear infinite; font-weight: 700;
-}
-
-.blue-shimmer {
-  background: linear-gradient(90deg, #00d2ff 0%, #ffffff 45%, #0095ff 55%, #ffffff 100%);
-  background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  animation: sweep 10s ease-in-out infinite; 
-}
-
-.animate-eyebrow { opacity: 0; animation: fadeInUpBlur 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-.animate-name { opacity: 0; animation: fadeInUpBlur 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; word-wrap: break-word; } 
-.hero-fade { opacity: 0; animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s forwards; }
-
-/* Scroll reveal style */
-.gc {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.8s ease;
-  filter: blur(10px);
-}
-.gc.reveal { opacity: 1; transform: translateY(0); filter: blur(0px); }
-
-/* ── CURSOR ── */
 #cur {
   position: fixed; top: 0; left: 0; width: 6px; height: 6px; background: var(--blue); border-radius: 50%;
   pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, box-shadow 0.3s;
@@ -84,6 +103,46 @@ body{
   animation: rotateHUD 8s linear infinite;
 }
 @keyframes rotateHUD { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeInUpBlur {
+  from { opacity: 0; transform: translateY(40px); filter: blur(15px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0px); }
+}
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, #f2f2f5 0%, #f2f2f5 40%, #c4b5fd 50%, #746dff 60%, #f2f2f5 100%);
+  background-size: 400% auto; 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
+  animation: fadeInUpBlur 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards, shimmer 12s linear infinite; 
+  font-weight: 700;
+  will-change: background-position, transform, opacity;
+}
+
+.blue-shimmer {
+  background: linear-gradient(90deg, #00d2ff 0%, #00d2ff 40%, #ffffff 50%, #00d2ff 60%, #00d2ff 100%);
+  background-size: 400% auto; 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 10s linear infinite; 
+  will-change: background-position;
+}
+
+.animate-eyebrow { opacity: 0; animation: fadeInUpBlur 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+.hero-fade { opacity: 0; animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s forwards; }
+
+.gc {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.8s ease;
+  filter: blur(10px);
+}
+.gc.reveal { opacity: 1; transform: translateY(0); filter: blur(0px); }
 
 /* ── BENTO SYSTEM ── */
 .container{max-width:1400px; margin:0 auto; padding:4vh 2.5rem;} 
@@ -99,104 +158,22 @@ body{
 
 .spot {
   position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .5s;
-  background:radial-gradient(450px circle at var(--mx,50%) var(--my,50%),rgba(124,92,252,0.08),transparent 70%);
+  background:radial-gradient(450px circle at var(--mx,50%) var(--my,50%),rgba(75, 30, 255, 0.132),transparent 70%);
 }
 .gc:hover .spot { opacity:1; }
 
-/* ── PROFILE & VISUALS ── */
-.profile-box {
-  width: 100px; 
-  height: 100px; 
-  border-radius: 28px; 
-  position: relative; 
-  margin-bottom: 2rem; 
-  background: var(--surface);
-  z-index: 1;
-}
-
-/* Glow Effect */
-.profile-box::before {
-  content: '';
-  position: absolute;
-  inset: -15px;
-  border-radius: 40px;
-  background: radial-gradient(circle, rgba(0, 208, 255, 0.637) 0%, rgba(4, 242, 255, 0) 70%);
-  filter: blur(20px);
-  z-index: -1;
-  pointer-events: none;
-}
-
-.profile-box img { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-  border-radius: 28px; 
-  border: 1px solid var(--border);
-  display: block;
-}
-
-.visit-card {
-  border-radius: 16px; overflow: hidden; height: 240px;
-  border: 1px solid var(--border); background: var(--surface);
-}
-.visit-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-.visit-card:hover img { transform: scale(1.08); }
-
-
-
-
-
-/* ── GLOBAL INTERACTIVE ITEM (THE NEON EFFECT) ── */
-/* ── UPDATED INTERACTIVE ITEM ── */
-.interactive-item {
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border-radius: 12px;
-  padding: 10px 16px; /* Slightly tighter padding */
-  margin-left: 0;      /* Removed negative margin to prevent overlap */
-  width: fit-content;  /* ONLY takes up space of the content inside */
-  max-width: 100%;     /* Prevents it from breaking the layout */
-  z-index: 1;
-}
-
-.interactive-item:hover {
-  transform: translateX(8px); /* Reduced movement distance */
-  background: rgba(255, 255, 255, 0);
-  z-index: 10; 
-}
-
-/* The Neon Left Bar (Adjusted for tighter box) */
-.interactive-item::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 0;
-  background: var(--blue);
-  box-shadow: 0 0 12px var(--blue);
-  transition: height 0.3s ease;
-  border-radius: 4px;
-}
-
-.interactive-item:hover::before { 
-  height: 70%; /* Shorter bar looks cleaner on smaller boxes */
-}
-
-.interactive-item svg { transition: all 0.3s ease; }
-.interactive-item:hover svg { transform: scale(1.15); color: var(--blue) !important; filter: drop-shadow(0 0 8px var(--blue)); }
-
-/* ── PROFILE ── */
 .profile-box { width: 100px; height: 100px; border-radius: 28px; position: relative; margin-bottom: 2rem; background: var(--surface); z-index: 1; }
 .profile-box::before { content: ''; position: absolute; inset: -15px; border-radius: 40px; background: radial-gradient(circle, rgba(0, 208, 255, 0.637) 0%, rgba(4, 242, 255, 0) 70%); filter: blur(20px); z-index: -1; pointer-events: none; }
 .profile-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 28px; border: 1px solid var(--border); display: block; }
 
-
-
-
-
-
+.interactive-item {
+  position: relative; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-radius: 12px; padding: 10px 16px; margin-left: 0; width: fit-content; max-width: 100%; z-index: 1;
+}
+.interactive-item:hover { transform: translateX(8px); background: rgba(255, 255, 255, 0.02); z-index: 10; }
+.interactive-item::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 0; background: var(--blue); box-shadow: 0 0 12px var(--blue); transition: height 0.3s ease; border-radius: 4px; }
+.interactive-item:hover::before { height: 70%; }
+.interactive-item svg { transition: all 0.3s ease; }
+.interactive-item:hover svg { transform: scale(1.15); color: var(--blue) !important; filter: drop-shadow(0 0 8px var(--blue)); }
 
 /* ── TYPOGRAPHY ── */
 .eyebrow{font-size:.75rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--t3); margin-bottom:1.2rem; display:block;}
@@ -205,98 +182,58 @@ body{
 
 .highlight-badge {
   display: inline-flex; padding: 4px 12px; border-radius: 99px; font-size: .75rem; font-weight: 600;
-  background: rgba(124, 92, 252, 0.1); border: 1px solid rgba(124, 92, 252, 0.2); color: #c4b5fd;
+  background: rgba(89, 49, 248, 0.079); border: 1px solid rgba(124, 92, 252, 0.2); color: #cc7aff;
   letter-spacing: 0.02em; white-space: nowrap; backdrop-filter: blur(4px);
 }
 .b-blue { background: rgba(0, 210, 255, 0.1) !important; border-color: rgba(0, 210, 255, 0.3) !important; color: #00d2ff !important; }
 .b-gold { background: rgba(111, 255, 0, 0.1) !important; border-color: rgba(64, 255, 0, 0.3) !important; color: #7dfe79 !important; }
 
-.edu-item { display: flex; gap: 16px; align-items: flex-start; }
-.edu-icon { width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0; }
-
-
-
-
-
-/* ── CONTACT & CTA (UPDATED) ── */
-.contact-list {
-  display: flex; 
-  flex-direction: column; 
-  gap: 12px;
-}
-
+/* ── CONTACT ── */
+.contact-list { display: flex; flex-direction: column; gap: 12px; }
 .contact-link {
-  display: flex; 
-  align-items: center; 
-  gap: 14px; 
-  color: var(--t2); 
-  text-decoration: none;
-  font-size: 1rem; 
-  padding: 10px 16px;
-  margin-left: -16px; /* Offset for hover padding */
-  border-radius: 12px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  width: fit-content;
+  display: flex; align-items: center; gap: 14px; color: var(--t2); text-decoration: none; font-size: 1rem; padding: 10px 16px; margin-left: -16px; border-radius: 12px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; width: fit-content;
 }
-
-.contact-link svg { 
-  color: var(--blue); 
-  opacity: 0.6; 
-  transition: all 0.3s ease;
-}
-
-.contact-link:hover { 
-  color: var(--t1); 
-  transform: translateX(12px);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: inset 0 0 15px rgba(0, 210, 255, 0.05);
-}
-
-.contact-link:hover svg { 
-  opacity: 1; 
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 8px var(--blue));
-}
-
-/* Subtle side indicator on hover */
-.contact-link::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 2px;
-  height: 0;
-  background: var(--blue);
-  transition: height 0.3s ease;
-  border-radius: 2px;
-}
-
-.contact-link:hover::before {
-  height: 60%;
-}
+.contact-link svg { color: var(--blue); opacity: 0.6; transition: all 0.3s ease; }
+.contact-link:hover { color: var(--t1); transform: translateX(12px); background: rgba(255, 255, 255, 0.04); }
+.contact-link:hover svg { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 8px var(--blue)); }
+.contact-link::before { content: ''; position: absolute; left: 0; width: 2px; height: 0; background: var(--blue); transition: height 0.3s ease; border-radius: 2px; }
+.contact-link:hover::before { height: 60%; }
 
 .cta-btn {
-  display: inline-flex; align-items: center; gap: 10px; padding: 1rem 2rem;
-  background: var(--blue); color: #080809; border-radius: 14px; font-weight: 700;
-  text-decoration: none; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  box-shadow: 0 10px 20px -10px rgba(0, 210, 255, 0.5);
+  display: inline-flex; align-items: center; gap: 10px; padding: 1rem 2rem; background: var(--blue); color: #080809; border-radius: 14px; font-weight: 700; text-decoration: none; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 10px 20px -10px rgba(0, 210, 255, 0.5);
 }
 .cta-btn:hover { transform: scale(1.05); background: #fff; box-shadow: 0 15px 30px -10px rgba(255, 255, 255, 0.4); }
 
 /* ── MOBILE OPTIMIZATIONS ── */
 @media(max-width:1024px){
-  .container { padding: 2rem 3.5rem; }
+  .container { padding: 4rem 1.5rem; }
   .bento { grid-template-columns: 1fr; gap: 16px; }
   .span2, .span3 { grid-column: span 1; }
-  .gc { padding: 1.5rem; border-radius: 20px; }
-  .profile-box::before { inset: -10px; filter: blur(15px); }
-  .gc div[style*="grid-template-columns"] {
+  .gc { padding: 1.8rem; border-radius: 20px; }
+  
+  /* Prevent horizontal cut-offs for internal grids */
+  .grid-mobile-fix {
     grid-template-columns: 1fr !important;
-    gap: 20px !important;
   }
-  div[style*="text-align: right"] { text-align: left !important; }
-  p[style*="margin-left: auto"] { margin-left: 0 !important; }
-  .contact-link:hover { transform: translateX(5px); }
+
+  .profile-box { margin-bottom: 1.5rem; }
+  
+  h1 { font-size: 3.5rem !important; }
+  
+  .status-indicator[style*="margin-left: auto"] { 
+    margin-left: 0 !important; 
+    margin-bottom: 1.5rem !important;
+  }
+  
+  div[style*="text-align: right"] { 
+    text-align: left !important; 
+  }
+  
+  p[style*="margin-left: auto"] { 
+    margin-left: 0 !important; 
+  }
+
+  footer { padding-top: 4rem !important; padding-bottom: 4rem !important; }
 }
 </style>
 </head>
@@ -305,161 +242,171 @@ body{
 <div id="cur"></div>
 <div id="ring"></div>
 
-<section class="container" style="padding-top:10rem; padding-bottom:4rem;">
-  <div class="profile-box animate-eyebrow">
-    <img src="images/profile.jpg" alt="Ramida Penuka">
-  </div>
-  <span class="eyebrow animate-eyebrow">— Portfolio 2026 —</span>
-  <h1 class="animate-name" style="font-size:clamp(3rem,10vw,6.5rem); letter-spacing:-.05em; line-height:1;">
-    <span class="shimmer-text">Ramida Penuka </span>
-  </h1>
-  <p class="body-sm hero-fade" style="font-size:clamp(1.1rem, 3vw, 1.4rem); max-width:800px; margin-top:2rem; color:var(--t1);">
-    Transport Management & Logistics Engineering Undergraduate. 
-    Synthesizing engineering precision with data analytics to optimize global supply chains.
-  </p>
-</section>
-
-<div class="container" style="padding-top: 0;">
-  <div class="bento">
-    
-    <div class="gc span2">
-      <div class="spot"></div>
-      <span class="eyebrow">Academic Qualifications</span>
-      <h3 class="h-lg blue-shimmer">Education & Credentials</h3>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:10px;">
-        <div class="interactive-item" style="display: flex; gap: 16px;">
-          <svg style="width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-          <div>
-            <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">BSc Eng Hons in TMLE</p>
-            <p class="body-sm">University of Moratuwa</p>
-            <div class="highlight-badge" style="margin-top:10px;">2028 Graduate</div>
-          </div>
-        </div>
-        <div class="interactive-item" style="display: flex; gap: 16px;">
-          <svg style="width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          <div>
-            <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">Physics (A), Maths (B), Chemistry (B)</p>
-            <p class="body-sm">Royal College, Colombo 07</p>
-            <div class="highlight-badge" style="margin-top:10px;">2022 A/L</div>
-          </div>
-        </div>
-      </div>
-      <div style="margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border);">
-        <div class="interactive-item" style="display: flex; gap: 16px;">
-          <svg style="width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <div>
-            <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">CIMA OCS Exams (Reading)</p>
-            <div class="highlight-badge" style="margin-top:10px;">Expected 2026</div>
-          </div>
-        </div>
-      </div>
+<div class="main-wrapper">
+  <section class="container" style="padding-top:8rem; padding-bottom:4rem;">
+    <div class="profile-box animate-eyebrow">
+      <img src="images/profile.jpg" alt="Ramida Penuka">
     </div>
 
-    <div class="gc">
-      <div class="spot"></div>
-      <span class="eyebrow">Expertise</span>
-      <h3 class="h-lg blue-shimmer">Technological Toolbox</h3>
-      <div style="margin-top:0.5rem; display: flex; flex-wrap: wrap; gap: 10px;">
-        <span class="highlight-badge b-blue">Python</span>
-        <span class="highlight-badge b-blue">Power BI</span>
-        <span class="highlight-badge b-blue">Advanced Excel</span>
-        <span class="highlight-badge b-gold">Cargowise Operator</span>
-        <span class="highlight-badge b-gold">Supply Chain Modeling</span>
-        <span class="highlight-badge">Project Coordination</span>
-      </div>
+    <div class="status-indicator animate-eyebrow" style="margin-bottom: 1.5rem;">
+      <span class="dot"></span>
+      <span class="status-text">Open for work</span>
     </div>
 
-    <div class="gc span3">
-      <div class="spot"></div>
-      <span class="eyebrow">Technical Engineering</span>
-      <h3 class="h-lg blue-shimmer">Systems & Automation</h3>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:20px;">
-         
+    <span class="eyebrow animate-eyebrow">— Portfolio 2026 —</span>
+    <h1 class="animate-name" style="font-size:clamp(3.5rem,10vw,6.5rem); letter-spacing:-.05em; line-height:1.1;">
+      <span class="shimmer-text">Ramida Penuka </span>
+    </h1>
+    <p class="body-sm hero-fade" style="font-size:clamp(1.1rem, 3vw, 1.4rem); max-width:800px; margin-top:2rem; color:var(--t1);">
+      Transport Management & Logistics Engineering Undergraduate. 
+      Synthesizing engineering precision with data analytics to optimize global supply chains.
+    </p>
+  </section>
+
+  <div class="container" style="padding-top: 0;">
+    <div class="bento">
+      
+      <div class="gc span2">
+        <div class="spot"></div>
+        <span class="eyebrow">Academic Qualifications</span>
+        <h3 class="h-lg blue-shimmer">Education & Credentials</h3>
+        <div class="grid-mobile-fix" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:15px;">
+          <div class="interactive-item" style="display: flex; gap: 16px;">
+            <svg style="width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            <div>
+              <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">BSc Eng Hons in TMLE</p>
+              <p class="body-sm">University of Moratuwa</p>
+              <div class="highlight-badge" style="margin-top:10px;">2028 Graduate</div>
+            </div>
+          </div>
+          <div class="interactive-item" style="display: flex; gap: 16px;">
+            <svg style="width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <div>
+              <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">Physics (A), Maths (B), Chemistry (B)</p>
+              <p class="body-sm">Royal College, Colombo 07</p>
+              <div class="highlight-badge" style="margin-top:10px;">2022 A/L</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--border);">
+          <div class="interactive-item" style="display: flex; gap: 16px;">
+            <svg style="width: 22px; height: 22px; color: var(--blue); margin-top: 4px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div>
+              <p style="font-weight:600; color:var(--t1); font-size:1.1rem;">CIMA OCS Exams (Reading)</p>
+              <div class="highlight-badge" style="margin-top:10px;">Expected 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gc">
+        <div class="spot"></div>
+        <span class="eyebrow">Expertise</span>
+        <h3 class="h-lg blue-shimmer">Technological Toolbox</h3>
+        <div style="margin-top:0.5rem; display: flex; flex-wrap: wrap; gap: 10px;">
+          <span class="highlight-badge b-blue">Python</span>
+          <span class="highlight-badge b-blue">Power BI</span>
+          <span class="highlight-badge b-blue">Advanced Excel</span>
+          <span class="highlight-badge b-gold">Cargowise Operator</span>
+          <span class="highlight-badge b-gold">Supply Chain Modeling</span>
+          <span class="highlight-badge">Project Coordination</span>
+        </div>
+      </div>
+
+      <div class="gc span3">
+        <div class="spot"></div>
+        <span class="eyebrow">Technical Engineering</span>
+        <h3 class="h-lg blue-shimmer">Systems & Automation</h3>
+        <div class="grid-mobile-fix" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:20px;">
+            <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <p style="color:var(--blue); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">EXPORT LOGISTICS</p>
+                <span class="highlight-badge" style="font-size: 0.65rem;">Group Project</span>
+              </div>
+              <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Garumuni Export Co. Improvement</p>
+              <p class="body-sm">Optimized export workflows and procurement strategies to streamline international distribution.</p>
+            </div>
           <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-              <p style="color:var(--blue); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">EXPORT LOGISTICS</p>
+              <p style="color:var(--blue); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">PORT AUTOMATION</p>
               <span class="highlight-badge" style="font-size: 0.65rem;">Group Project</span>
             </div>
-            <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Garumuni Export Co. Improvement</p>
-            <p class="body-sm">Optimized export workflows and procurement strategies to streamline international distribution.</p>
+            <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Prime Mover Process Automation</p>
+            <p class="body-sm">Designed an automated framework for prime mover movements to reduce idle time and increase terminal efficiency.</p>
           </div>
+        </div>
+      </div>
 
-        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <p style="color:var(--blue); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">PORT AUTOMATION</p>
-            <span class="highlight-badge" style="font-size: 0.65rem;">Group Project</span>
+      <div class="gc span3">
+        <div class="spot"></div>
+        <span class="eyebrow">Professional Experience</span>
+        <h3 class="h-lg blue-shimmer">Projects & Impact</h3>
+        <div class="grid-mobile-fix" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
+          <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
+            <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">CHAIR PERSON</p>
+            <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Data Storm v6.0 - OCTAVE</p>
+            <p class="body-sm">Led industry collaboration with John Keells Holdings for data analytics.</p>
           </div>
-          <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Prime Mover Process Automation</p>
-          <p class="body-sm">Designed an automated framework for prime mover movements to reduce idle time and increase terminal efficiency.</p>
+          <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
+            <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">PROJECT LEADER</p>
+            <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Library Renovation - Atlas Axillia</p>
+            <p class="body-sm">Managed end-to-end renovation project for Atlas Axillia (Hemas Holdings subsidiary).</p>
+          </div>
+          <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
+            <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">LEADERSHIP</p>
+            <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Rotaract Club Member</p>
+            <p class="body-sm">Inducted based on dedication to community-driven logistics and teamwork.</p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="gc span3">
-      <div class="spot"></div>
-      <span class="eyebrow">Professional Experience</span>
-      <h3 class="h-lg blue-shimmer">Projects & Impact</h3>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;">
-        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
-          <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">CHAIR PERSON</p>
-          <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Data Storm v6.0 - OCTAVE</p>
-          <p class="body-sm">Led industry collaboration with John Keells Holdings for data analytics.</p>
-        </div>
-        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
-          <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">PROJECT LEADER</p>
-          <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Library Renovation - Atlas Axillia</p>
-          <p class="body-sm">Managed end-to-end renovation project for Atlas Axillia (Hemas Holdings subsidiary).</p>
-        </div>
-        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
-          <p style="color:var(--violet); font-size:.75rem; font-weight:700; letter-spacing: 0.1em;">LEADERSHIP</p>
-          <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Rotaract Club Member</p>
-          <p class="body-sm">Inducted based on dedication to community-driven logistics and teamwork.</p>
+      <div class="gc span3">
+        <div class="spot"></div>
+        <span class="eyebrow">Availability</span>
+        <h3 class="h-lg blue-shimmer">Let's Connect</h3>
+        <div class="grid-mobile-fix" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:40px; align-items: center;">
+          <div class="contact-list">
+            <a href="mailto:lgrpenuka@gmail.com" class="contact-link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              lgrpenuka@gmail.com
+            </a>
+            <a href="#" class="contact-link"> 
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+              LinkedIn
+            </a>
+            <a href="#" class="contact-link"> 
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              GitHub
+            </a>
+            <a href="https://wa.me/94769947326" target="_blank" class="contact-link">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+          <div style="text-align: right;">
+            <div class="status-indicator" style="margin-left: auto; margin-bottom: 1rem;">
+              <span class="dot"></span>
+              <span class="status-text">Accepting Projects</span>
+            </div>
+            <p class="body-sm" style="margin-bottom: 2rem; max-width: 320px; margin-left: auto;">
+              Available for industry collaborations and data-driven logistics roles starting late 2026.
+            </p>
+            <a href="mailto:lgrpenuka@gmail.com" class="cta-btn">
+              Start a Conversation
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="gc span3">
-      <div class="spot"></div>
-      <span class="eyebrow">Availability</span>
-      <h3 class="h-lg blue-shimmer">Let's Connect</h3>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:40px; align-items: center;">
-        <div class="contact-list">
-          <a href="mailto:lgrpenuka@gmail.com" class="contact-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-            lgrpenuka@gmail.com
-          </a>
-          <a href="#" class="contact-link"> 
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-            LinkedIn
-          </a>
-          <a href="#" class="contact-link"> 
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            GitHub
-          </a>
-          <a href="https://wa.me/94769947326" target="_blank" class="contact-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            WhatsApp
-          </a>
-        </div>
-        <div style="text-align: right;">
-          <p class="body-sm" style="margin-bottom: 2rem; max-width: 320px; margin-left: auto;">
-            Available for industry collaborations and data-driven logistics roles starting late 2026.
-          </p>
-          <a href="mailto:lgrpenuka@gmail.com" class="cta-btn">
-            Start a Conversation
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
     </div>
-
   </div>
-</div>
 
-<footer class="container" style="text-align:center; padding-top:8rem; padding-bottom:8rem;">
-  <p class="shimmer-text" style="font-size:1.8rem;">Connecting Systems, Data, and People.</p>
-  <p class="body-sm" style="margin-top:1.5rem; font-size: 1rem;">lgrpenuka@gmail.com | +94769947326 | Kesbewa, Sri Lanka</p>
-</footer>
+  <footer class="container" style="text-align:center; padding-top:8rem; padding-bottom:8rem;">
+    <p class="shimmer-text" style="font-size:1.8rem;">Connecting Systems, Data, and People.</p>
+    <p class="body-sm" style="margin-top:1.5rem; font-size: 1rem;">lgrpenuka@gmail.com | +94769947326 | Kesbewa, Sri Lanka</p>
+  </footer>
+</div>
 
 <script>
 /* ── CURSOR ── */
@@ -495,7 +442,7 @@ document.querySelectorAll('.gc').forEach(card=>{
 });
 
 /* ── REPLAYABLE SCROLL REVEAL ── */
-const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
