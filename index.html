@@ -127,11 +127,11 @@ body.focus-mode::after {
 
 #cur {
   position: fixed; top: 0; left: 0; width: 6px; height: 6px; background: var(--blue); border-radius: 50%;
-  pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, box-shadow 0.3s;
+  pointer-events: none; z-index: 200000; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, box-shadow 0.3s;
 }
 #ring {
   position: fixed; top: 0; left: 0; width: 38px; height: 38px; border: 1.5px dashed rgba(0, 210, 255, 0.4); border-radius: 50%;
-  pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, border 0.3s, transform 0.1s ease-out;
+  pointer-events: none; z-index: 199999; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, border 0.3s, transform 0.1s ease-out;
   animation: rotateHUD 8s linear infinite;
 }
 @keyframes rotateHUD { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
@@ -517,13 +517,6 @@ html, body {
   transition: filter 0.3s ease;
 }
 
-#cred-overlay.active {
-  display: flex;
-}
-
-#cred-overlay.active #expanded-img {
-  transform: scale(1);
-}
 
 /* ── BLUR SYSTEM for credentials ── */
 /* ── BLUR SYSTEM ── */
@@ -536,42 +529,9 @@ html, body {
   pointer-events: none;
 }
 
-#cred-overlay {
-  position: fixed; 
-  inset: 0; 
-  z-index: 100001; 
-  display: none; /* JS toggles this to flex */
-  background: rgba(30, 0, 66, 0.179); 
-  backdrop-filter: blur(8px);
-  align-items: center; 
-  justify-content: center; 
-  cursor: pointer;
-  
-  /* ADD THESE FOR FADE OUT */
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
 
-#cred-overlay.active {
-  opacity: 1;
-}
 
-#expanded-img { 
-  max-width: 85%; 
-  max-height: 80vh; 
-  border-radius: 12px; 
-  box-shadow: 0 0 50px rgba(0,0,0,0.8); 
-  
-  /* ADD THESE FOR SCALE + FADE */
-  transform: scale(0.8); 
-  opacity: 0;
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
-}
 
-#cred-overlay.active #expanded-img { 
-  transform: scale(1); 
-  opacity: 1;
-}
 
 
 
@@ -789,6 +749,125 @@ html, body {
   box-shadow: none !important;
   color: var(--blue) !important;
 }
+
+/* ── LIGHTBOX REBUILD ── */
+#cred-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  display: none;
+  background: transparent;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+#cred-overlay.active { opacity: 1; }
+
+#close-cred {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.85);
+  font-size: 1.4rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10002;
+  transition: background 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+}
+#close-cred:hover { background: rgba(255,255,255,0.16); transform: scale(1.1); }
+
+#lb-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 88vw;
+}
+
+#lb-img-wrap {
+  position: relative;
+  border-radius: 14px;
+  box-shadow: 0 0 80px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.06);
+  cursor: pointer;
+  /* initial entry animation handled by JS */
+}
+
+#expanded-img {
+  display: block;
+  max-width: 85vw;
+  max-height: 72vh;
+  border-radius: 14px;
+  object-fit: contain;
+  will-change: transform, opacity;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+#lb-footer {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.lb-counter {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.08em;
+}
+
+.lb-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(0,210,255,0.7);
+  letter-spacing: 0.04em;
+  animation: lb-hint-pulse 2.4s ease-in-out infinite;
+}
+.lb-hint svg { flex-shrink: 0; animation: lb-hint-arrow 2.4s ease-in-out infinite; }
+.lb-hint.hide { display: none; }
+
+@keyframes lb-hint-pulse {
+  0%,100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+@keyframes lb-hint-arrow {
+  0%,100% { transform: translateX(0); }
+  50%      { transform: translateX(4px); }
+}
+
+/* Slide-transition animations */
+@keyframes lb-exit-blur {
+  from { filter: blur(0px);   opacity: 1; transform: scale(1); }
+  to   { filter: blur(22px);  opacity: 0; transform: scale(1.06); }
+}
+@keyframes lb-enter-blur {
+  from { filter: blur(22px);  opacity: 0; transform: scale(0.96); }
+  to   { filter: blur(0px);   opacity: 1; transform: scale(1); }
+}
+@keyframes lb-open-in {
+  from { filter: blur(16px); transform: scale(0.88); opacity: 0; }
+  to   { filter: blur(0px);  transform: scale(1);    opacity: 1; }
+}
+
+#lb-img-wrap.anim-open  { animation: lb-open-in   0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+#lb-img-wrap.anim-exit  { animation: lb-exit-blur  0.28s cubic-bezier(0.4,0,1,1) forwards; }
+#lb-img-wrap.anim-enter { animation: lb-enter-blur  0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
 </style>
 </head>
 <body>
@@ -797,8 +876,19 @@ html, body {
   <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t2)"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
 </button>
 <div id="cred-overlay">
-    <button id="close-cred" style="position:absolute; top:30px; right:30px; background:none; border:none; color:white; font-size:3rem; cursor:pointer;">&times;</button>
-    <img id="expanded-img" src="" alt="Credential">
+  <button id="close-cred" aria-label="Close">&times;</button>
+  <div id="lb-inner">
+    <div id="lb-img-wrap">
+      <img id="expanded-img" src="" alt="Credential">
+    </div>
+    <div id="lb-footer">
+      <span id="lb-counter" class="lb-counter"></span>
+      <span id="lb-hint" class="lb-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        Tap image to cycle
+      </span>
+    </div>
+  </div>
 </div>
 
 <div id="cur"></div>
@@ -971,7 +1061,7 @@ html, body {
               <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Garumuni Export Co. Improvement</p>
               <p class="body-sm">Optimized export workflows and procurement strategies to streamline international distribution.</p>
               <div style="margin-top:1rem;">
-                <button class="view-cred-btn" data-img="project-garumuni.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+                <button class="view-cred-btn" data-imgs="profile.jpg,gallery.jpg,profile.jpg,gallery.jpg,profile.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
               </div>
             </div>
           <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
@@ -982,7 +1072,7 @@ html, body {
             <p style="font-weight:600; font-size:1.2rem; margin-bottom:.8rem; color:var(--t1);">Prime Mover Process Automation</p>
             <p class="body-sm">Designed an automated framework for prime mover movements to reduce idle time and increase terminal efficiency.</p>
             <div style="margin-top:1rem;">
-              <button class="view-cred-btn" data-img="project-primemover.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+              <button class="view-cred-btn" data-imgs="profile.jpg,gallery.jpg,profile.jpg,gallery.jpg,profile.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
             </div>
           </div>
         </div>
@@ -998,7 +1088,7 @@ html, body {
             <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Data Storm v6.0 - OCTAVE</p>
             <p class="body-sm">Led industry collaboration with John Keells Holdings for data analytics.</p>
             <div style="margin-top:1rem;">
-              <button class="view-cred-btn" data-img="project-datastorm.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+              <button class="view-cred-btn" data-imgs="profile.jpg,gallery.jpg,profile.jpg,gallery.jpg,profile.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
             </div>
           </div>
           <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
@@ -1006,7 +1096,7 @@ html, body {
             <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Library Renovation - Atlas Axillia</p>
             <p class="body-sm">Managed end-to-end renovation project for Atlas Axillia (Hemas Holdings subsidiary).</p>
             <div style="margin-top:1rem;">
-              <button class="view-cred-btn" data-img="project-library.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+              <button class="view-cred-btn" data-imgs="profile.jpg,gallery.jpg,profile.jpg,gallery.jpg,profile.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
             </div>
           </div>
           <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); padding:2rem; border-radius:18px; backdrop-filter: blur(8px);">
@@ -1014,7 +1104,7 @@ html, body {
             <p style="font-weight:600; font-size:1.2rem; margin:.8rem 0; color:var(--t1);">Rotaract Club Member</p>
             <p class="body-sm">Inducted based on dedication to community-driven logistics and teamwork.</p>
             <div style="margin-top:1rem;">
-              <button class="view-cred-btn" data-img="project-rotaract.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
+              <button class="view-cred-btn" data-imgs="profile.jpg,gallery.jpg,profile.jpg,gallery.jpg,profile.jpg" style="background:none; border:none; color:var(--blue); font-size:0.75rem; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.1em; padding:0;">.View Project</button>
             </div>
           </div>
         </div>
@@ -1116,10 +1206,7 @@ html, body {
   <div class="blob-3"></div>
   </div>
 
-  <div id="cred-overlay" style="position:fixed; inset:0; z-index:9999; display:none; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); align-items:center; justify-content:center; cursor:pointer;">
-    <button id="close-cred" style="position:absolute; top:30px; right:30px; background:none; border:none; color:white; font-size:2rem; cursor:pointer; z-index:10001;">&times;</button>
-    <img id="expanded-img" src="" style="max-width:85%; max-height:80vh; border-radius:12px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 0 50px rgba(0,0,0,1); transform:scale(0.9); transition:transform 0.3s ease; cursor:default;">
-</div>
+
 
 </div>
 
@@ -1170,51 +1257,90 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.gc').forEach(el => observer.observe(el));
 
-/* ── LIGHTBOX LOGIC for credentials ── */
-const overlay = document.getElementById('cred-overlay');
-const expandedImg = document.getElementById('expanded-img');
-const mainWrapper = document.querySelector('.main-wrapper');
-const viewBtns = document.querySelectorAll('.view-cred-btn');
+/* ── LIGHTBOX ── */
+(function () {
+  const overlay    = document.getElementById('cred-overlay');
+  const imgEl      = document.getElementById('expanded-img');
+  const imgWrap    = document.getElementById('lb-img-wrap');
+  const counter    = document.getElementById('lb-counter');
+  const hint       = document.getElementById('lb-hint');
+  const closeBtn   = document.getElementById('close-cred');
+  const mainWrap   = document.querySelector('.main-wrapper');
 
-viewBtns.forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const imgSrc = btn.getAttribute('data-img');
-    expandedImg.src = imgSrc;
-    
+  let imgs = [], idx = 0;
+
+  function updateCounter() {
+    counter.textContent = imgs.length > 1 ? (idx + 1) + ' / ' + imgs.length : '';
+  }
+
+  function open(imageList) {
+    imgs = imageList;
+    idx  = 0;
+    imgEl.src = imgs[0];
+    updateCounter();
+    hint.classList.toggle('hide', imgs.length < 2);
+
     overlay.style.display = 'flex';
-    setTimeout(() => overlay.classList.add('active'), 10);
-    mainWrapper.classList.add('is-blurred');
-    
-    // Hide custom cursor while image is open
-    cur.style.opacity = '0';
-    ring.style.opacity = '0';
-  });
-});
+    requestAnimationFrame(() => {
+      overlay.classList.add('active');
+      imgWrap.classList.remove('anim-exit', 'anim-enter');
+      imgWrap.classList.add('anim-open');
+      imgWrap.addEventListener('animationend', () => imgWrap.classList.remove('anim-open'), { once: true });
+    });
 
-function closeOverlay() {
-    // 1. Remove the 'active' class first to trigger the CSS opacity/scale transition
+    if (mainWrap) mainWrap.classList.add('is-blurred');
+  }
+
+  function advance() {
+    if (imgs.length < 2) return;
+    imgWrap.classList.remove('anim-enter', 'anim-open');
+    imgWrap.classList.add('anim-exit');
+    imgWrap.addEventListener('animationend', () => {
+      idx = (idx + 1) % imgs.length;
+      imgEl.src = imgs[idx];
+      updateCounter();
+      imgWrap.classList.remove('anim-exit');
+      imgWrap.classList.add('anim-enter');
+      imgWrap.addEventListener('animationend', () => imgWrap.classList.remove('anim-enter'), { once: true });
+      // Hide hint after first tap
+      hint.classList.add('hide');
+    }, { once: true });
+  }
+
+  function close() {
     overlay.classList.remove('active');
-    
-    // 2. Remove the blur from the background
-    mainWrapper.classList.remove('is-blurred');
-    
-    // 3. Wait for the 0.4s CSS transition to finish before hiding the element entirely
-    setTimeout(() => { 
-        overlay.style.display = 'none'; 
-    }, 400); // Matches the 0.4s duration in your CSS
-    
-    // 4. Bring the custom cursor back
-    if (cur && ring) {
-        cur.style.opacity = '1';
-        ring.style.opacity = '1';
-    }
-}
+    overlay.addEventListener('transitionend', () => {
+      if (!overlay.classList.contains('active')) overlay.style.display = 'none';
+    }, { once: true });
+    if (mainWrap) mainWrap.classList.remove('is-blurred');
+    cur.style.opacity = '1';
+    ring.style.opacity = '1';
+  }
 
-overlay.addEventListener('click', closeOverlay);
-document.getElementById('close-cred').addEventListener('click', closeOverlay);
-expandedImg.addEventListener('click', (e) => e.stopPropagation());
-document.addEventListener('keydown', (e) => { if(e.key === "Escape") closeOverlay(); });
+  // Wire up all view-cred-btn buttons
+  document.querySelectorAll('.view-cred-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const multi = btn.getAttribute('data-imgs');
+      const single = btn.getAttribute('data-img');
+      const list = multi ? multi.split(',').map(s => s.trim()) : [single];
+      open(list);
+    });
+  });
+
+  // Tap image to advance
+  imgWrap.addEventListener('click', e => { e.stopPropagation(); advance(); });
+
+  // Click backdrop to close
+  overlay.addEventListener('click', close);
+
+  // Close button
+  closeBtn.addEventListener('click', e => { e.stopPropagation(); close(); });
+
+  // Escape key
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
 
 
 /* ── REPLAYABLE SCROLL REVEAL ── */
