@@ -1290,10 +1290,37 @@
     @media (max-width: 680px) {
       .nav-links { display: none; }
       .burger-btn { display: flex; }
-      section { padding: 3rem 0; }
+      section { padding: 4rem 0; }
       .hero { padding: 72px 1.5rem 4rem; }
       .wrap { padding: 0 1.25rem; }
       nav { top: 8px; }
+
+      /* Fix nav crowding: hide text badge, show dot-only pill */
+      .nav-status-text { display: none; }
+      .nav-status {
+        padding: 2px 6px;
+        gap: 0;
+        background: transparent;
+        border: none;
+      }
+      .nav-status-dot { width: 9px; height: 9px; }
+
+      /* Prevent logo from wrapping */
+      .nav-logo { white-space: nowrap; font-size: 0.85rem; }
+
+      /* Ensure nav-inner stays single-line */
+      .nav-inner { height: 48px; padding: 0 0.9rem; gap: 0; }
+      .nav-left { gap: 6px; }
+
+      /* Stack badges below text on very narrow screens */
+      .row-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .item-badge { align-self: flex-start; margin-top: 0.25rem; }
+
+      /* Ensure mobile menu is above all other fixed elements */
+      .mobile-menu { z-index: 201; }
+
+      /* Writing + Contact spacing */
+      .writing-item { padding: 2rem 0; }
     }
 
     @media (min-width: 681px) {
@@ -1349,7 +1376,7 @@
       <div class="nav-left">
         <a href="#" class="nav-logo">Ramida Penuka</a>
         <span class="nav-status">
-          <span class="nav-status-dot"></span>Open for internship opportunities
+          <span class="nav-status-dot"></span><span class="nav-status-text">Open for internship opportunities</span>
         </span>
       </div>
       <ul class="nav-links">
@@ -1757,8 +1784,8 @@
       <span class="sec-label reveal-me">Published Work</span>
       <h2 class="sec-title reveal-me" style="--rd:60ms">Writing</h2>
 
-      <div class="writing-item reveal-me" style="--rd:0ms; display:flex; justify-content:space-between; align-items:flex-start; gap:1.5rem;">
-        <div>
+      <div class="writing-item reveal-me" style="--rd:0ms; display:flex; align-items:flex-start; gap:1.5rem; flex-wrap:wrap;">
+        <div style="flex:1 1 0; min-width:220px;">
           <div class="writing-meta">
             <span class="writing-cat">Case Study</span>
             <span class="writing-date">2025</span>
@@ -1954,7 +1981,7 @@
         'Marine Sector Management',
         'Logistics',
         'Operations Research',
-        'Cold chani supply chain',
+        'Cold chain supply chain',
       ];
       let ri = 0, ci = 0, deleting = false;
       const SPEED_TYPE = 68, SPEED_DEL = 38, PAUSE_END = 1800, PAUSE_START = 380;
@@ -2072,15 +2099,26 @@
     (function () {
       const burger = document.getElementById('burger');
       const menu = document.getElementById('mobile-menu');
-      burger.addEventListener('click', () => {
+
+      function closeMenu() {
+        burger.classList.remove('open');
+        menu.classList.remove('open');
+      }
+
+      burger.addEventListener('click', (e) => {
+        e.stopPropagation();
         burger.classList.toggle('open');
         menu.classList.toggle('open');
       });
+
       document.querySelectorAll('.mobile-link').forEach(a => {
-        a.addEventListener('click', () => {
-          burger.classList.remove('open');
-          menu.classList.remove('open');
-        });
+        a.addEventListener('click', closeMenu);
+      });
+
+      document.addEventListener('click', (e) => {
+        if (menu.classList.contains('open') && !menu.contains(e.target) && !burger.contains(e.target)) {
+          closeMenu();
+        }
       });
     })();
 
