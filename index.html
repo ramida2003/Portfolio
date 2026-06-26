@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <script type="module">
@@ -855,7 +855,10 @@ window.$RefreshSig$ = () => (type) => type;</script>
       transition: color 0.15s ease; text-decoration: none;
     }
 
+    [data-theme="dark"] .item-link { color: #60a5fa; }
+
     .item-link:hover { color: var(--t1); }
+    [data-theme="dark"] .item-link:hover { color: #bfdbfe; }
 
     .item-actions {
       display: flex; align-items: center; gap: 1.2rem;
@@ -1226,13 +1229,13 @@ window.$RefreshSig$ = () => (type) => type;</script>
       display: none; align-items: center; justify-content: center;
       background: rgba(0,0,0,0); backdrop-filter: blur(0px);
       -webkit-backdrop-filter: blur(0px);
-      transition: background 0.50s ease, backdrop-filter 0.8s ease;
+      transition: background 0.35s ease, backdrop-filter 0.35s ease;
       cursor: pointer;
     }
 
     #profile-modal.open {
       display: flex;
-      background: rgba(0, 0, 0, 0.305);
+      background: rgba(0,0,0,0.65);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
     }
@@ -1275,7 +1278,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
     /* ══ LIGHTBOX ══ */
     #cred-overlay {
       position: fixed; inset: 0; z-index: 100001;
-      display: none; background: rgba(0, 0, 0, 0.088);
+      display: none; background: rgba(0, 0, 0, 0.15);
       backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
       align-items: center; justify-content: center; flex-direction: column;
       opacity: 0; transition: opacity 0.5s ease;
@@ -1285,19 +1288,19 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
     #close-cred {
       position: absolute; top: 22px; right: 26px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.109);
       border: 1px solid rgba(255,255,255,0.2);
       color: rgba(255,255,255,0.85);
       font-size: 1.3rem; width: 38px; height: 38px;
       border-radius: 50%; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      z-index: 10002; transition: background 0.2s ease; line-height: 1;
+      z-index: 10002; transition: background 0.5s ease; line-height: 1;
     }
 
     #close-cred:hover { background: rgba(255,255,255,0.18); }
 
     #lb-inner { display: flex; flex-direction: column; align-items: center; gap: 1rem; max-width: 88vw; }
-    #lb-img-wrap { position: relative; border-radius: 12px; box-shadow: 0 0 80px rgba(0,0,0,0.8); cursor: pointer; }
+    #lb-img-wrap { position: relative; border-radius: 12px; box-shadow: 0 0 0px rgba(0,0,0,0.8); cursor: pointer; }
     #expanded-img { display: block; max-width: 85vw; max-height: 72vh; border-radius: 12px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
     #lb-footer { display: flex; align-items: center; gap: 1.4rem; }
     .lb-counter { font-size: 0.75rem; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; }
@@ -1392,6 +1395,30 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
     @media (min-width: 681px) {
       .mobile-menu { display: none !important; }
+    }
+    /* ══ LIBRARY RENOVATION EXPAND ══ */
+    .lib-expand-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease;
+      opacity: 0;
+    }
+    .lib-expand-body.open {
+      max-height: 600px;
+      opacity: 1;
+    }
+    .lib-detail-list {
+      list-style: none; padding: 0; margin: 0.4rem 0 0 0;
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .lib-detail-list li {
+      font-size: 0.875rem; color: var(--t2); line-height: 1.55;
+      display: flex; align-items: flex-start; gap: 0.5rem;
+    }
+    .lib-detail-dot {
+      display: inline-block; width: 5px; height: 5px;
+      border-radius: 50%; background: var(--t3);
+      margin-top: 0.55em; flex-shrink: 0;
     }
   </style>
   <script type="module">"use strict";(()=>{var B="0.5.21";var y={HIGHLIGHT_COLOR:"#0079F2",HIGHLIGHT_BG:"#0079F210",ALLOWED_PARENT_DOMAINS:[".replit.dev",".replit.com",".replit-staging.com",".rp-humain.com",".repl.co"],THEME_PREVIEW_STYLE_ID:"replit-theme-preview",MAX_SIBLING_HIGHLIGHTERS:1e3,MAX_DESCENDANTS_FOR_SCREENSHOT:1500},oe=`
@@ -1674,18 +1701,16 @@ window.$RefreshSig$ = () => (type) => type;</script>
           </div>
         </div>
 
-        <div class="row-item reveal-me" style="--rd:240ms">
+        <div class="row-item reveal-me" style="--rd:160ms">
           <div>
-            <span class="item-label">CIMA — Chartered Institute of Management Accountants</span>
-            <p class="item-title">CIMA Operational Level</p>
-            <p class="item-sub">OCS Exam: August 2026 · Currently preparing for Operational Case Study</p>
-            <div class="item-actions">
-              <button class="item-link view-cred-btn" data-img="gallery.jpg">View registration ↗</button>
-            </div>
+            <span class="item-label">SLIIT</span>
+            <p class="item-title">AI &amp; Machine Learning Engineering</p>
+            <p class="item-sub">Stage 1 — Currently enrolled</p>
+            <button class="item-link view-cred-btn" data-img="SLIIT stage 1.jpg">View credential ↗</button>
           </div>
           <div class="item-right">
             <span class="item-badge highlight">In Progress</span>
-            <img class="inst-logo" src="cima.png" alt="CIMA">
+            <img class="inst-logo" src="sliit.png" alt="SLIIT">
           </div>
         </div>
 
@@ -1796,7 +1821,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
               <a href="https://github.com/lgrpenuka/garumuni-web-app/blob/main/index.html" target="_blank" class="item-link" style="margin-top:0;">Source code ↗</a>
               <a href="https://ramida2003.github.io/garumuni-web-app/" target="_blank" class="item-link" style="margin-top:0;">Live app ↗</a>
             </div>
-            <a href="SCGarumuni.pdf" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">View project ↗</a>
+            <a href="Garumuni.pdf" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">View project ↗</a>
           </div>
         </div>
 
@@ -1935,16 +1960,18 @@ window.$RefreshSig$ = () => (type) => type;</script>
           </div>
         </div>
 
-        <div class="row-item reveal-me" style="--rd:160ms">
+        <div class="row-item reveal-me" style="--rd:240ms">
           <div>
-            <span class="item-label">SLIIT</span>
-            <p class="item-title">AI &amp; Machine Learning Engineering</p>
-            <p class="item-sub">Stage 1 — Currently enrolled</p>
-            <button class="item-link view-cred-btn" data-img="SLIIT stage 1.jpg">View credential ↗</button>
+            <span class="item-label">CIMA — Chartered Institute of Management Accountants</span>
+            <p class="item-title">CIMA Operational Level</p>
+            <p class="item-sub">OCS Exam: August 2026 · Currently preparing for Operational Case Study</p>
+            <div class="item-actions">
+              <button class="item-link view-cred-btn" data-img="gallery.jpg">View registration ↗</button>
+            </div>
           </div>
           <div class="item-right">
             <span class="item-badge highlight">In Progress</span>
-            <img class="inst-logo" src="sliit.png" alt="SLIIT">
+            <img class="inst-logo" src="cima.png" alt="CIMA">
           </div>
         </div>
 
@@ -1964,8 +1991,34 @@ window.$RefreshSig$ = () => (type) => type;</script>
           <div>
             <span class="item-label">Project Leader — Atlas Axillia (Hemas Holdings)</span>
             <p class="item-title">Library Renovation</p>
-            <p class="item-sub">Managed end-to-end renovation project for Atlas Axillia, improving community access to learning resources and delivering within scope.</p>
-            <a href="Library Renovation.pdf" target="_blank" rel="noopener" class="item-link">View project ↗</a>
+            <p class="item-sub" style="margin-bottom:0.3rem;">📍 Walagamba Vidyalaya, Bandarawela</p>
+            <p class="item-sub">Led an 8-member team to fully revitalize a school library in critical condition, collaborating with industry partners Atlas Axilia Co. (Pvt) Ltd, Ceylon Biscuits Limited (Munchee), and Watareka Hardwares to renovate an entire library during 3 site visits.</p>
+
+            <div class="lib-expand-body" id="lib-expand-body" aria-hidden="true">
+              <p class="item-sub" style="margin-top:0.75rem; font-weight:600; color:var(--t1);">Structural &amp; Aesthetic Renovation</p>
+              <ul class="lib-detail-list">
+                <li><span class="lib-detail-dot"></span>Eradicated severe termite infestation and installed a brand-new ceiling from scratch.</li>
+                <li><span class="lib-detail-dot"></span>Erected a structural wall partition to separate the library from an adjacent room, creating a quiet dedicated study environment.</li>
+                <li><span class="lib-detail-dot"></span>Repainted the entire library, restored and painted all internal fixtures and furniture, cleaned and sorted the book collection, and repainted and polished the floors.</li>
+                <li><span class="lib-detail-dot"></span>Installed a new 4-bulb lighting layout to completely brighten the reading space.</li>
+              </ul>
+
+              <p class="item-sub" style="margin-top:0.75rem; font-weight:600; color:var(--t1);">Educational Impact</p>
+              <p class="item-sub">Hosted a specialised STEM educational workshop for students, focusing on preparation and motivation for their Ordinary Level (O/L) examinations.</p>
+
+              <p class="item-sub" style="margin-top:0.75rem; font-weight:600; color:var(--t1);">Corporate Sponsors &amp; Acknowledgements</p>
+              <ul class="lib-detail-list">
+                <li><span class="lib-detail-dot"></span><strong>Atlas Axillia</strong> — LKR 100,000 corporate sponsorship and LKR 20,000 worth of premium stationery.</li>
+                <li><span class="lib-detail-dot"></span><strong>Munchee Biscuits</strong> — Free biscuits for the entire school's student body.</li>
+                <li><span class="lib-detail-dot"></span><strong>Watareka Hardwares</strong> — Donated paint baskets and high-quality paintbrushes to support the physical renovation.</li>
+              </ul>
+            </div>
+
+            <div class="item-actions" style="margin-top:0.7rem;">
+              <button class="item-link lib-read-more-btn" aria-expanded="false" aria-controls="lib-expand-body">Read more ↓</button>
+              <a href="Library Renovation.pdf" target="_blank" rel="noopener" class="item-link">Project Report ↗</a>
+              <button class="item-link view-cred-btn" data-imgs="beyond 1.png, beyond 2.png, beyond 3.png, beyond 4.png, beyond 5.png" data-carousel="true">View Gallery ↗</button>
+            </div>
           </div>
           <span class="item-badge">Leadership</span>
         </div>
@@ -2013,7 +2066,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
   <section id="writing">
     <div class="wrap">
       <span class="sec-label reveal-me">Published Work</span>
-      <h2 class="sec-title reveal-me" style="--rd:60ms">Writing & Cases Studies</h2>
+      <h2 class="sec-title reveal-me" style="--rd:60ms">Writing</h2>
 
       <div class="writing-item reveal-me" style="--rd:0ms; display:flex; align-items:flex-start; gap:1.5rem; flex-wrap:wrap;">
         <div style="flex:1 1 0; min-width:220px;">
@@ -2707,6 +2760,18 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
       animate();
     })();
+
+    /* ── Library Renovation Read More toggle ── */
+    (function () {
+      var btn = document.querySelector('.lib-read-more-btn');
+      var body = document.getElementById('lib-expand-body');
+      if (!btn || !body) return;
+      btn.addEventListener('click', function () {
+        var isOpen = body.classList.toggle('open');
+        body.setAttribute('aria-hidden', String(!isOpen));
+        btn.setAttribute('aria-expanded', String(isOpen));
+        btn.textContent = isOpen ? 'Read less ↑' : 'Read more ↓';
+      });
+    })();
   </script>
-</body>
 </html>
