@@ -63,7 +63,7 @@
     "image": "profile.jpg",
     "jobTitle": "Logistics Engineer & Data Analyst",
     "description": "Synthesizing engineering precision with financial analytics to optimize supply chains and drive data-backed decisions.",
-    "email": "penuka.lgr@gmail.com",
+    "email": "lgrpenuka@gmail.com",
     "telephone": "+94769947326",
     "address": {
       "@type": "PostalAddress",
@@ -193,14 +193,13 @@
     @media (max-width: 680px) { #back-to-top { bottom: 20px; right: 16px; } }
     /* ══ END BACK TO TOP ══ */
 
-    /* ══ PHONEBOX WIDGET (footer easter egg — dark mode only) ══ */
+    /* ══ PHONEBOX WIDGET (footer easter egg) ══ */
     .footer-phonebox-wrap {
       position: relative;
-      display: none;
+      display: flex;
       flex-direction: column;
       align-items: flex-start;
     }
-    [data-theme="dark"] .footer-phonebox-wrap { display: flex; }
 
     #phonebox-btn {
       position: relative;
@@ -223,11 +222,14 @@
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       border-radius: 50%;
-      background: rgba(99, 130, 255, 0.45);
+      background: rgba(99, 130, 255, 0.22);
       filter: blur(14px);
       animation: phonebox-pulse 3.5s ease-in-out infinite;
       pointer-events: none;
       z-index: 0;
+    }
+    [data-theme="dark"] #phonebox-btn::before {
+      background: rgba(99, 130, 255, 0.45);
     }
     @keyframes phonebox-pulse {
       0%, 100% { opacity: 0.15; transform: translate(-50%, -50%) scale(0.75); }
@@ -273,11 +275,11 @@
       bottom: calc(100% + 12px);
       left: 0;
       width: 340px;
-      background: rgba(10, 16, 36, 0.82);
+      background: rgba(255, 255, 255, 0.78);
       backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
-      border: 1px solid rgba(99,130,255,0.2);
+      border: 1px solid rgba(15, 23, 42, 0.12);
       border-radius: var(--radius);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
       padding: 1.4rem 1.4rem 1.2rem;
       z-index: 50;
       opacity: 0; pointer-events: none;
@@ -285,12 +287,18 @@
       transform-origin: bottom left;
       transition: opacity 0.28s ease, transform 0.28s ease;
     }
+    [data-theme="dark"] #phonebox-popup {
+      background: rgba(10, 16, 36, 0.82);
+      border-color: rgba(99,130,255,0.2);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+    }
     #phonebox-popup.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
     .pb-title {
       font-size: 0.92rem; font-weight: 700; color: var(--t1);
       margin-bottom: 0.5rem; display: flex; align-items: center; gap: 7px;
     }
-    .pb-body { font-size: 0.8rem; color: #b8c4d8; line-height: 1.65; margin-bottom: 1rem; }
+    .pb-body { font-size: 0.8rem; color: #53627a; line-height: 1.65; margin-bottom: 1rem; }
+    [data-theme="dark"] .pb-body { color: #b8c4d8; }
     .pb-cta {
       display: inline-flex; align-items: center; gap: 5px;
       font-size: 0.8rem; font-weight: 600; color: var(--t1);
@@ -499,31 +507,52 @@
 
     /* mobile drawer */
     .mobile-menu {
-      display: none; position: fixed;
-      top: 74px; left: 50%; transform: translateX(-50%);
+      display: flex; position: fixed;
+      top: 74px; left: 50%; transform: translateX(-50%) translateY(-8px);
       width: min(320px, calc(100vw - 2rem));
+      max-height: 0; overflow: hidden;
+      opacity: 0; visibility: hidden;
+      pointer-events: none;
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border: 1px solid var(--glass-border);
+      border: 1px solid transparent;
       border-radius: var(--radius);
       box-shadow: var(--shadow-lg);
-      padding: 1rem 1.25rem;
+      padding: 0 1.25rem 0.75rem;
       z-index: 199;
-      flex-direction: column; gap: 0.5rem;
+      flex-direction: column; gap: 0.65rem;
+      transition: opacity 0.28s ease, transform 0.28s ease, max-height 0.3s ease, padding 0.3s ease, border-color 0.3s ease, visibility 0.28s ease;
     }
 
-    .mobile-menu.open { display: flex; }
+    .mobile-menu.open {
+      opacity: 1; visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+      max-height: 460px;
+      padding: 1rem 1.25rem 1.1rem;
+      border-color: var(--glass-border);
+    }
 
-    .mobile-menu a {
+    .mobile-menu .mobile-link {
       padding: 0.65rem 0.75rem;
       border-radius: var(--radius-sm);
       color: var(--t1); text-decoration: none;
       font-size: 0.95rem; font-weight: 500;
-      transition: background 0.15s ease;
+      transition: background 0.15s ease, transform 0.2s ease, opacity 0.2s ease;
+      opacity: 0; transform: translateY(6px);
     }
 
-    .mobile-menu a:hover { background: var(--glass-bg2); }
+    .mobile-menu.open .mobile-link {
+      opacity: 1; transform: translateY(0);
+    }
+
+    .mobile-menu .mobile-link:hover { background: var(--glass-bg2); }
+    .mobile-menu .pb-word {
+      display: inline-block;
+      opacity: 0;
+      animation: pb-word-rise 0.28s ease forwards;
+    }
 
     .cv-btn-sm {
       margin-top: 0.25rem;
@@ -818,8 +847,20 @@
 
     [data-theme="dark"] .item-link { color: #60a5fa; }
 
+    [data-theme="light"] .item-link { color: #2d8cf0; }
+    [data-theme="light"] .item-link:hover { color: #1870d5; }
     .item-link:hover { color: var(--t1); }
+    [data-theme="dark"] .item-link { color: #60a5fa; }
     [data-theme="dark"] .item-link:hover { color: #bfdbfe; }
+
+    .project-read-more-btn,
+    .lib-read-more-btn {
+      color: #2d8cf0;
+    }
+    [data-theme="dark"] .project-read-more-btn,
+    [data-theme="dark"] .lib-read-more-btn {
+      color: #60a5fa;
+    }
 
     .item-actions {
       display: flex; align-items: center; gap: 1.2rem;
@@ -1428,13 +1469,15 @@
       .mobile-menu { display: none !important; }
     }
     /* ══ LIBRARY RENOVATION EXPAND ══ */
-    .lib-expand-body {
+    .lib-expand-body,
+    .project-expand-body {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease;
       opacity: 0;
     }
-    .lib-expand-body.open {
+    .lib-expand-body.open,
+    .project-expand-body.open {
       max-height: 600px;
       opacity: 1;
     }
@@ -1734,14 +1777,16 @@
 
         <div class="row-item reveal-me" style="--rd:160ms">
           <div>
-            <span class="item-label">SLIIT</span>
-            <p class="item-title">AI &amp; Machine Learning Engineering</p>
-            <p class="item-sub">Stage 1 — Currently enrolled</p>
-            <button class="item-link view-cred-btn" data-img="./certifications/SLIIT stage 1.jpg">View credential ↗</button>
+            <span class="item-label">CIMA — Chartered Institute of Management Accountants</span>
+            <p class="item-title">CIMA Operational Level</p>
+            <p class="item-sub">OCS Exam: August 2026 · Currently preparing for Operational Case Study</p>
+            <div class="item-actions">
+              <button class="item-link view-cred-btn" data-img="gallery.jpg">View registration ↗</button>
+            </div>
           </div>
           <div class="item-right">
             <span class="item-badge highlight">In Progress</span>
-            <img class="inst-logo" src="./icons/sliit.png" alt="SLIIT">
+            <img class="inst-logo" src="./icons/cima.png" alt="CIMA">
           </div>
         </div>
 
@@ -1831,7 +1876,7 @@
         <div class="bento-tile span3 reveal-me" style="--rd:0ms">
           <span class="tile-tag">WebView App · Google Sheets API · Supply Chain</span>
           <p class="tile-title">Garumuni Foods (Pvt) Ltd — Unloading Traceability App</p>
-          <p class="tile-desc">Sole-developed a WebView application after four on-site visits and meetings with the Head of Finance. Replaced a <strong>3-person, two-step</strong> paper-then-Excel process with a <strong>2-person single-step</strong> digital workflow — workers log directly in the app, data syncs to Google Sheets in real time, mismatches are auto-flagged, and full farmer traceability is captured. Estimated <strong>~40% reduction</strong> in data processing time, <strong>1 headcount saved</strong> on the task, and <strong>near-zero transcription errors</strong>.</p>
+          <p class="tile-desc">Sole-developed a WebView application after four on-site visits and meetings with the Head of Finance. Replaced a <strong>3-person, two-step</strong> paper based process with a <strong>2-person single-step</strong> digital workflow — workers log directly in the app, data syncs to Google Sheets in real time, mismatches are auto-flagged, and full farmer traceability is captured. Estimated <strong>~40% reduction</strong> in data processing time, <strong>1 headcount saved</strong> on the task, and <strong>near-zero transcription errors</strong>.</p>
           <div class="code-preview">
             <div class="code-titlebar">
               <span class="code-dot r"></span>
@@ -1849,8 +1894,8 @@
           <div class="tile-foot" style="align-items:center;">
             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
               <span class="tile-badge">Sole Developer · Logistics Optimisation</span>
-              <a href="https://github.com/lgrpenuka/garumuni-web-app/blob/main/index.html" target="_blank" class="item-link" style="margin-top:0;">Source code ↗</a>
-              <a href="https://ramida2003.github.io/garumuni-web-app/" target="_blank" class="item-link" style="margin-top:0;">Live app ↗</a>
+              <a href="https://github.com/lgrpenuka./garumuni-web-app/blob/main/index.html" target="_blank" class="item-link" style="margin-top:0;">Source code ↗</a>
+              <a href="https://ramida2003.github.io./garumuni-web-app/" target="_blank" class="item-link" style="margin-top:0;">Live app ↗</a>
             </div>
             <a href="./garumuni/Garumuni.pdf" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">View project ↗</a>
           </div>
@@ -1861,16 +1906,19 @@
           <span class="tile-tag">Power BI · DAX · Supply Chain Analytics</span>
           <p class="tile-title">Supply Chain Performance &amp; Risk Analytics Dashboard</p>
           <p class="tile-desc">Analyzed <strong>180,520 supply chain transaction records</strong> spanning 2015–2018 across five key dimensions:</p>
-          <ul class="tile-bullets">
-            <li><strong>Executive KPIs</strong> — business performance monitoring with dynamic measures</li>
-            <li><strong>Logistics &amp; Delivery</strong> — late delivery root-cause analysis and regional efficiency tracking</li>
-            <li><strong>Product Profitability</strong> — portfolio margin and discount impact analysis</li>
-            <li><strong>Customer Segmentation</strong> — value-tier breakdown and buying-pattern identification</li>
-            <li><strong>Supply Chain Risk</strong> — operational risk scoring and bottleneck detection</li>
-          </ul>
-          <p class="tile-desc" style="margin-top:0.6rem;">Built with <strong>advanced DAX measures &amp; calculated columns</strong> for time-intelligence and KPI logic, <strong>Power Query</strong> for multi-step data cleaning and transformation, <strong>star-schema data modelling</strong> with managed relationships, and <strong>interactive slicers, drill-throughs &amp; drill-downs</strong> for self-serve analysis.</p>
-          <div style="margin-top:0.5rem; margin-bottom:0.2rem;">
-            <a href="https://www.kaggle.com/datasets/saicharankomati/dataco-supply-chain-dataset" target="_blank" rel="noopener" class="item-link" style="font-size:0.78rem; margin-top:0;">DataCo Supply Chain Dataset ↗</a>
+          <div class="project-expand-body" id="dashboard-expand" aria-hidden="true">
+            <ul class="tile-bullets">
+              <li><strong>Executive KPIs</strong> — business performance monitoring with dynamic measures</li>
+              <li><strong>Logistics &amp; Delivery</strong> — late delivery root-cause analysis and regional efficiency tracking</li>
+              <li><strong>Product Profitability</strong> — portfolio margin and discount impact analysis</li>
+              <li><strong>Customer Segmentation</strong> — value-tier breakdown and buying-pattern identification</li>
+              <li><strong>Supply Chain Risk</strong> — operational risk scoring and bottleneck detection</li>
+            </ul>
+            <p class="tile-desc" style="margin-top:0.6rem;">Built with <strong>advanced DAX measures &amp; calculated columns</strong> for time-intelligence and KPI logic, <strong>Power Query</strong> for multi-step data cleaning and transformation, <strong>star-schema data modelling</strong> with managed relationships, and <strong>interactive slicers, drill-throughs &amp; drill-downs</strong> for self-serve analysis.</p>
+          </div>
+          <div class="item-actions" style="margin-top:0.45rem; flex-wrap:wrap; gap:0.75rem;">
+            <button class="item-link project-read-more-btn" aria-expanded="false" aria-controls="dashboard-expand">Read more ↓</button>
+            
           </div>
           <div class="chart-preview">
             <div class="chart-title-bar">
@@ -1910,7 +1958,7 @@
             <span class="tile-badge">Individual Project · Power BI · DataCo Dataset</span>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
               <a href="https://www.kaggle.com/datasets/saicharankomati/dataco-supply-chain-dataset" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Dataset ↗</a>
-              <a href="./power_bi_1/Project 2.pbix" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Pproject file ↗</a>
+              <a href="power_bi_1/Project 2.pbix" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Pproject file ↗</a>
               <button class="item-link view-cred-btn" data-imgs="./power_bi_1/Screenshot (86).png,./power_bi_1/Screenshot (94).png,./power_bi_1/Screenshot (97).png,./power_bi_1/Screenshot (99).png,./power_bi_1/Screenshot (103).png,./power_bi_1/Screenshot (87).png,./power_bi_1/Screenshot (88).png,./power_bi_1/Screenshot (89).png,./power_bi_1/Screenshot (90).png,./power_bi_1/Screenshot (91).png,./power_bi_1/Screenshot (92).png,./power_bi_1/Screenshot (93).png,./power_bi_1/Screenshot (95).png,./power_bi_1/Screenshot (96).png,./power_bi_1/Screenshot (98).png,./power_bi_1/Screenshot (100).png,./power_bi_1/Screenshot (101).png,./power_bi_1/Screenshot (102).png,./power_bi_1/Screenshot (104).png,./power_bi_1/Screenshot (105).png" data-carousel="true" style="margin-top:0;">Screenshots ↗</button>
             </div>
           </div>
@@ -1920,31 +1968,55 @@
         <div class="bento-tile span3 reveal-me" style="--rd:200ms">
           <span class="tile-tag">Automation · relay.app · Supply Chain Intelligence</span>
           <p class="tile-title">Supply Chain Control Tower</p>
-          <p class="tile-desc">I built an <strong>AI-powered Supply Chain Control Tower</strong> using Google Sheets + Relay.app that simulates how real logistics systems respond to disruptions in real time.
-
-It <strong>automatically detects delayed shipments, generates incident reports, and uses AI to decide severity and required actions.</strong> On top of that, it produces daily executive summaries showing risks, delays, and system performance.
-
-What made it interesting for me was seeing how simple data in a sheet can evolve into a decision-making system when you add automation + AI on top.
-
-This project helped me understand how real-world logistics control towers work — from detection to decisions to reporting.</p>
-          <ul class="tile-bullets">
-            <li><strong>Delay Classification</strong> — identifies and categorises the root cause (port congestion, weather, customs, carrier fault)</li>
-            <li><strong>Executive Summary Generation</strong> — produces structured incident reports with recommended corrective actions for future shipments</li>
-            <li><strong>Stakeholder Alerting</strong> — dispatches real-time <strong>Telegram notifications</strong> to responsible users with delay context and next steps</li>
-          </ul>
-          <p class="tile-desc" style="margin-top:0.6rem;">Built to eliminate manual follow-up loops, reduce response lag, and surface decision-ready intelligence directly to operations teams — without opening a dashboard.</p>
-          <div class="flow-preview">
-            <div class="flow-title-bar">
-              <span class="chart-label"><b>Automation Flow:</b>  Every hour &rarr; Shipment Monitor  &rarr;  Creates new incident in Google Sheets  &rarr;  AI Incident Analyzer  &rarr;  Updates incident with AI analysis  &rarr;  Executive Reporting</span>
-              <span class="chart-dot"></span>
-            </div>
-            
+          <p class="tile-desc">I built an <strong>AI-powered Supply Chain Control Tower</strong> using Google Sheets + Relay.app that simulates how real logistics systems respond to disruptions in real time.</p>
+          <div class="project-expand-body" id="controltower-expand" aria-hidden="true">
+            <p class="tile-desc" style="margin-top:0.6rem;">It <strong>automatically detects delayed shipments, generates incident reports, and uses AI to decide severity and required actions.</strong> On top of that, it produces daily executive summaries showing risks, delays, and system performance.</p>
+            <p class="tile-desc" style="margin-top:0.6rem;">What made it interesting for me was seeing how simple data in a sheet can evolve into a decision-making system when you add automation + AI on top.</p>
+            <p class="tile-desc" style="margin-top:0.6rem;">This project helped me understand how real-world logistics control towers work — from detection to decisions to reporting.</p>
+            <ul class="tile-bullets">
+              <li><strong>Delay Classification</strong> — identifies and categorises the root cause (port congestion, weather, customs, carrier fault)</li>
+              <li><strong>Executive Summary Generation</strong> — produces structured incident reports with recommended corrective actions for future shipments</li>
+              <li><strong>Stakeholder Alerting</strong> — dispatches real-time <strong>Telegram notifications</strong> to responsible users with delay context and next steps</li>
+            </ul>
           </div>
+          <div class="item-actions" style="margin-top:0.45rem; flex-wrap:wrap; gap:0.75rem;">
+            <button class="item-link project-read-more-btn" aria-expanded="false" aria-controls="controltower-expand">Read more ↓</button>
+          </div>
+          
           <div class="tile-foot">
             <span class="tile-badge">Automation Project · relay.app · Telegram API</span>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
               <a href="./sc tower/Walkthrough.pdf" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Walkthrough ↗</a>
-              <button class="item-link view-cred-btn" data-imgs="./sc tower/1.png,./sc tower/2.png,./sc tower/3.png,./sc tower/mockup.png,./sc tower/4.png,./sc tower/5.png" data-carousel="true" style="margin-top:0;">Screenshots ↗</button>
+              <button class="item-link view-cred-btn" data-imgs="./sc tower/1.png,./sc tower/2.png,./sc tower/3.png,sc tower/mockup.png,./sc tower/4.png,./sc tower/5.png" data-carousel="true" style="margin-top:0;">Screenshots ↗</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-tile span3 reveal-me" style="--rd:240ms">
+          <span class="tile-tag">Advanced Excel · Forecasting · Inventory Analytics</span>
+          <p class="tile-title">Retail Demand Forecasting &amp; Inventory Analytics System | Advanced Excel Project</p>
+          <p class="tile-desc">An end-to-end retail analytics project using Microsoft Excel, transforming raw Walmart sales data into an interactive decision-support tool.</p>
+          <div class="project-expand-body" id="walmart-expand" aria-hidden="true">
+            <p class="tile-desc" style="margin-top:0.6rem;">The objective was to analyze historical sales patterns, forecast future demand, and support inventory planning decisions through advanced Excel modelling.</p>
+            <p class="tile-desc" style="margin-top:0.6rem;"><strong>Key components developed:</strong></p>
+            <ul class="tile-bullets">
+              <li><strong>Data Engineering &amp; Transformation:</strong> integrated multiple datasets (sales, store information, and economic factors) using Power Query and cleaned/transformed 421,000+ transaction records into an analytical dataset.</li>
+              <li><strong>Sales Analytics Dashboard:</strong> developed KPI analysis using Pivot Tables and Pivot Charts, analyzed sales trends, store performance, department performance, and holiday impacts, and created interactive filtering using slicers and dynamic controls.</li>
+              <li><strong>Demand Forecasting Model:</strong> built forecasting models using Moving Average and Exponential Smoothing, developed forecast accuracy evaluation metrics, and created an automated model comparison system to identify the better forecasting approach.</li>
+              <li><strong>Inventory Analytics:</strong> developed an EOQ-based inventory planning model and analyzed ordering and holding cost relationships to support inventory decisions.</li>
+            </ul>
+            <p class="tile-desc" style="margin-top:0.6rem;"><strong>Excel techniques applied:</strong> Power Query (ETL), Dynamic Arrays (FILTER, SORT, UNIQUE), Advanced Excel Functions, Pivot Tables &amp; Interactive Dashboards, Forecasting Models, and Supply Chain Analytics.</p>
+            <p class="tile-desc" style="margin-top:0.6rem;">This project helped strengthen my skills in data analytics, demand planning, and supply chain decision modelling using Excel.</p>
+          </div>
+          <div class="item-actions" style="margin-top:0.45rem; flex-wrap:wrap; gap:0.75rem;">
+            <button class="item-link project-read-more-btn" aria-expanded="false" aria-controls="walmart-expand">Read more ↓</button>
+          </div>
+          <div class="tile-foot">
+            <span class="tile-badge">Excel Project · Retail Analytics · Walmart Dataset</span>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
+              <a href="https://github.com/ramida2003/Portfolio/tree/main/wallmart/walmart-recruiting-store-sales-forecasting" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Dataset ↗</a>
+              <a href="https://drive.google.com/drive/folders/1YYYvfm8aGovd-PjhX7cDQWuj0rJtHLbC?usp=sharing" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Excel file ↗</a>
+              <button class="item-link view-cred-btn" data-imgs="./wallmart/Screenshots/Screenshot (150).png,./wallmart/Screenshots/Screenshot (151).png,./wallmart/Screenshots/Screenshot (152).png,./wallmart/Screenshots/Screenshot (153).png,./wallmart/Screenshots/Screenshot (154).png" data-carousel="true" style="margin-top:0;">Screenshots ↗</button>
             </div>
           </div>
         </div>
@@ -2011,16 +2083,16 @@ This project helped me understand how real-world logistics control towers work �
 
         <div class="row-item reveal-me" style="--rd:240ms">
           <div>
-            <span class="item-label">CIMA — Chartered Institute of Management Accountants</span>
-            <p class="item-title">CIMA Operational Level</p>
-            <p class="item-sub">OCS Exam: August 2026 · Currently preparing for Operational Case Study</p>
+            <span class="item-label">SLIIT</span>
+            <p class="item-title">AI &amp; Machine Learning Engineering</p>
+            <p class="item-sub">Stage 1 — Currently enrolled</p>
             <div class="item-actions">
-              <button class="item-link view-cred-btn" data-img="gallery.jpg">View registration ↗</button>
+              <button class="item-link view-cred-btn" data-img="./certifications/SLIIT stage 1.jpg">View credential ↗</button>
             </div>
           </div>
           <div class="item-right">
             <span class="item-badge highlight">In Progress</span>
-            <img class="inst-logo" src="./icons/cima.png" alt="CIMA">
+            <img class="inst-logo" src="./icons/sliit.png" alt="SLIIT">
           </div>
         </div>
 
@@ -2198,11 +2270,11 @@ This project helped me understand how real-world logistics control towers work �
 
           <div style="margin-bottom: 1.5rem;">
             <div class="email-row">
-              <a href="mailto:penuka.lgr@gmail.com" class="contact-link">
+              <a href="mailto:lgrpenuka@gmail.com" class="contact-link">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-                penuka.lgr@gmail.com
+                lgrpenuka@gmail.com
               </a>
-              <button class="copy-btn" id="copy-email-btn" aria-label="Copy email address" data-email="penuka.lgr@gmail.com">
+              <button class="copy-btn" id="copy-email-btn" aria-label="Copy email address" data-email="lgrpenuka@gmail.com">
                 <svg class="copy-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                 <svg class="copy-tick" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
@@ -2222,7 +2294,7 @@ This project helped me understand how real-world logistics control towers work �
           </div>
 
           <div style="display:flex; flex-direction:column; gap:8px;">
-            <a href="mailto:penuka.lgr@gmail.com" class="btn btn-primary" style="border-radius:999px; justify-content:center;">
+            <a href="mailto:lgrpenuka@gmail.com" class="btn btn-primary" style="border-radius:999px; justify-content:center;">
               Start a Conversation
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
@@ -2269,7 +2341,7 @@ This project helped me understand how real-world logistics control towers work �
         <!-- RIGHT: name, slogan, contact -->
         <div class="footer-right">
           <p class="footer-line">Connecting Systems, Data &amp; People.</p>
-          <p class="footer-sub">penuka.lgr@gmail.com &nbsp;·&nbsp; +94 769 947 326 &nbsp;·&nbsp; Kesbewa, Sri Lanka</p>
+          <p class="footer-sub">lgrpenuka@gmail.com &nbsp;·&nbsp; +94 769 947 326 &nbsp;·&nbsp; Kesbewa, Sri Lanka</p>
           <div class="footer-meta">
             <span class="footer-meta-item">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -2438,6 +2510,26 @@ This project helped me understand how real-world logistics control towers work �
     (function () {
       const burger = document.getElementById('burger');
       const menu = document.getElementById('mobile-menu');
+      const links = Array.from(menu.querySelectorAll('.mobile-link'));
+
+      function buildMenuText() {
+        links.forEach((link, index) => {
+          const label = link.textContent.trim();
+          if (!label) return;
+          const words = label.split(/(\s+)/).filter(Boolean);
+          const wrapped = words.map((word, wordIndex) => {
+            if (/^\s+$/.test(word)) return word;
+            return `<span class="pb-word" style="animation-delay:${(index * 0.045 + wordIndex * 0.035).toFixed(3)}s">${word}</span>`;
+          }).join('');
+          link.innerHTML = wrapped;
+        });
+      }
+
+      function openMenu() {
+        buildMenuText();
+        burger.classList.add('open');
+        menu.classList.add('open');
+      }
 
       function closeMenu() {
         burger.classList.remove('open');
@@ -2446,11 +2538,10 @@ This project helped me understand how real-world logistics control towers work �
 
       burger.addEventListener('click', (e) => {
         e.stopPropagation();
-        burger.classList.toggle('open');
-        menu.classList.toggle('open');
+        menu.classList.contains('open') ? closeMenu() : openMenu();
       });
 
-      document.querySelectorAll('.mobile-link').forEach(a => {
+      links.forEach(a => {
         a.addEventListener('click', closeMenu);
       });
 
@@ -2665,7 +2756,7 @@ This project helped me understand how real-world logistics control towers work �
 
         if (!isConfigured) {
           const body = `Name: ${name}\nEmail: ${email}\n\n${message}`;
-          window.location.href = `mailto:penuka.lgr@gmail.com?subject=${encodeURIComponent(subject || 'Portfolio Contact: ' + name)}&body=${encodeURIComponent(body)}`;
+          window.location.href = `mailto:lgrpenuka@gmail.com?subject=${encodeURIComponent(subject || 'Portfolio Contact: ' + name)}&body=${encodeURIComponent(body)}`;
           setTimeout(() => {
             document.getElementById('cf-form-wrap').style.display = 'none';
             const s = document.getElementById('cf-success');
@@ -2822,16 +2913,17 @@ This project helped me understand how real-world logistics control towers work �
       animate();
     })();
 
-    /* ── Library Renovation Read More toggle ── */
+    /* ── Project Read More toggle ── */
     (function () {
-      var btn = document.querySelector('.lib-read-more-btn');
-      var body = document.getElementById('lib-expand-body');
-      if (!btn || !body) return;
-      btn.addEventListener('click', function () {
-        var isOpen = body.classList.toggle('open');
-        body.setAttribute('aria-hidden', String(!isOpen));
-        btn.setAttribute('aria-expanded', String(isOpen));
-        btn.textContent = isOpen ? 'Read less ↑' : 'Read more ↓';
+      document.querySelectorAll('.project-read-more-btn, .lib-read-more-btn').forEach(btn => {
+        const body = document.getElementById(btn.getAttribute('aria-controls'));
+        if (!body) return;
+        btn.addEventListener('click', function () {
+          const isOpen = body.classList.toggle('open');
+          body.setAttribute('aria-hidden', String(!isOpen));
+          btn.setAttribute('aria-expanded', String(isOpen));
+          btn.textContent = isOpen ? 'Read less ↑' : 'Read more ↓';
+        });
       });
     })();
   </script>
