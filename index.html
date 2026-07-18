@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -961,6 +964,24 @@
       color: var(--t2); width: fit-content; opacity: 0.9; font-size: 0.78rem;
     }
 
+    .tile-badge.ongoing {
+      background: rgba(34,197,94,0.12);
+      border-color: rgba(34,197,94,0.3);
+      color: var(--green-text);
+    }
+
+    .tile-badge.group {
+      background: rgba(59,130,246,0.12);
+      border-color: rgba(59,130,246,0.3);
+      color: var(--t1);
+    }
+
+    .tile-badge.completed {
+      background: rgba(59,130,246,0.12);
+      border-color: rgba(59,130,246,0.3);
+      color: #2563eb;
+    }
+
     .tile-foot {
       display: flex; align-items: center;
       justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
@@ -1894,9 +1915,10 @@
           </div>
           <div class="tile-foot" style="align-items:center;">
             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <span class="tile-badge completed">Completed</span>
               <span class="tile-badge">Sole Developer · Logistics Optimisation</span>
-              <a href="https://github.com/lgrpenuka./garumuni-web-app/blob/main/index.html" target="_blank" class="item-link" style="margin-top:0;">Source code ↗</a>
-              <a href="https://ramida2003.github.io./garumuni-web-app/" target="_blank" class="item-link" style="margin-top:0;">Live app ↗</a>
+              <a href="https://github.com/lgrpenuka/garumuni-web-app/blob/main/index.html" target="_blank" class="item-link" style="margin-top:0;">Source code ↗</a>
+              <a href="https://ramida2003.github.io/garumuni-web-app/" target="_blank" class="item-link" style="margin-top:0;">Live app ↗</a>
             </div>
             <a href="./garumuni/Garumuni.pdf" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">View project ↗</a>
           </div>
@@ -1956,17 +1978,68 @@
             </div>
           </div>
           <div class="tile-foot">
-            <span class="tile-badge">Individual Project · Power BI · DataCo Dataset</span>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+              <span class="tile-badge completed">Completed</span>
+              <span class="tile-badge">Individual Project · Power BI · DataCo Dataset</span>
+            </div>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
               <a href="https://www.kaggle.com/datasets/saicharankomati/dataco-supply-chain-dataset" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Dataset ↗</a>
-              <a href="power_bi_1/Project 2.pbix" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Pproject file ↗</a>
+              <a href="./power_bi_1/Project 2.pbix" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Pproject file ↗</a>
               <button class="item-link view-cred-btn" data-imgs="./power_bi_1/Screenshot (86).png,./power_bi_1/Screenshot (94).png,./power_bi_1/Screenshot (97).png,./power_bi_1/Screenshot (99).png,./power_bi_1/Screenshot (103).png,./power_bi_1/Screenshot (87).png,./power_bi_1/Screenshot (88).png,./power_bi_1/Screenshot (89).png,./power_bi_1/Screenshot (90).png,./power_bi_1/Screenshot (91).png,./power_bi_1/Screenshot (92).png,./power_bi_1/Screenshot (93).png,./power_bi_1/Screenshot (95).png,./power_bi_1/Screenshot (96).png,./power_bi_1/Screenshot (98).png,./power_bi_1/Screenshot (100).png,./power_bi_1/Screenshot (101).png,./power_bi_1/Screenshot (102).png,./power_bi_1/Screenshot (104).png,./power_bi_1/Screenshot (105).png" data-carousel="true" style="margin-top:0;">Screenshots ↗</button>
             </div>
           </div>
         </div>
 
-        <!-- Tile 4: Supply Chain Control Tower — full width -->
+        <!-- Tile 3: Shared Last-Mile Mobility Platform — ongoing -->
+        <div class="bento-tile span3 reveal-me" style="--rd:160ms">
+          <span class="tile-tag">Systems Engineering · Mobility · Shared Transport</span>
+          <p class="tile-title">Shared Last-Mile Mobility Platform</p>
+          <p class="tile-desc">Developing a shared mobility concept to improve short-distance transportation by matching passengers travelling to similar destinations and enabling cost-sharing through existing three-wheelers. The project aims to reduce passenger waiting time, improve vehicle occupancy, and provide an affordable and sustainable alternative for last-mile travel.</p>
+          <div class="project-expand-body" id="mobility-expand" aria-hidden="true">
+            <ul class="tile-bullets">
+              <li><strong>Current work:</strong> user needs analysis, mobility system design, business model development, and systems engineering.</li>
+              <li><strong>First-phase focus:</strong> assessing the project’s impact on congestion and safety at the Piliyandala–Katubedda Junction–Moratuwa Bus Stand route.</li>
+              <li><strong>Team:</strong> Y.N. Mahaarachchi (Leader), L.G.R. Penuka, K.S.A. Anthony, M.S.D.Deshapriya, D.J.G.R.G.S.Dissanayake, S.S. Fletcher, J.M.D.S. Galgamuwa, M. Habileshan, M.N. Wickramage, and W.G.R.S. Wickremasinghe.</li>
+            </ul>
+          </div>
+          <div class="item-actions" style="margin-top:0.45rem; flex-wrap:wrap; gap:0.75rem;">
+            <button class="item-link project-read-more-btn" aria-expanded="false" aria-controls="mobility-expand">Read more ↓</button>
+          </div>
+          <div class="tile-foot">
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <span class="tile-badge ongoing">Ongoing</span>
+              <span class="tile-badge group">Group Project</span>
+            </div>
+            <span class="tile-badge">Systems Engineering · Mobility</span>
+          </div>
+        </div>
+
+        <!-- Tile 4: Empty Container Movement Optimization System — ongoing -->
         <div class="bento-tile span3 reveal-me" style="--rd:200ms">
+          <span class="tile-tag">Systems Engineering · Freight · Container Logistics</span>
+          <p class="tile-title">Empty Container Movement Optimization System</p>
+          <p class="tile-desc">Designing a systems engineering solution to reduce unnecessary empty container movements in freight transportation. The project focuses on improving container utilization through stakeholder coordination, real-time information sharing, and container matching to minimize transportation costs, fuel consumption, and road congestion.</p>
+          <div class="project-expand-body" id="container-expand" aria-hidden="true">
+            <ul class="tile-bullets">
+              <li><strong>Current work:</strong> stakeholder analysis, systems engineering methodologies, business model development, and solution architecture.</li>
+              <li><strong>First-phase focus:</strong> Kurunegala, Pannala, Biyagama, and Nittabuwa, where container movements are also common.</li>
+              <li><strong>Team:</strong> Y.N. Mahaarachchi (Leader), L.G.R. Penuka, K.S.A. Anthony, M.S.D.Deshapriya, D.J.G.R.G.S.Dissanayake, S.S. Fletcher, J.M.D.S. Galgamuwa, M. Habileshan, M.N. Wickramage, and W.G.R.S. Wickremasinghe.</li>
+            </ul>
+          </div>
+          <div class="item-actions" style="margin-top:0.45rem; flex-wrap:wrap; gap:0.75rem;">
+            <button class="item-link project-read-more-btn" aria-expanded="false" aria-controls="container-expand">Read more ↓</button>
+          </div>
+          <div class="tile-foot">
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <span class="tile-badge ongoing">Ongoing</span>
+              <span class="tile-badge group">Group Project</span>
+            </div>
+            <span class="tile-badge">Systems Engineering · Freight</span>
+          </div>
+        </div>
+
+        <!-- Tile 5: Supply Chain Control Tower — full width -->
+        <div class="bento-tile span3 reveal-me" style="--rd:240ms">
           <span class="tile-tag">Automation · relay.app · Supply Chain Intelligence</span>
           <p class="tile-title">Supply Chain Control Tower</p>
           <p class="tile-desc">I built an <strong>AI-powered Supply Chain Control Tower</strong> using Google Sheets + Relay.app that simulates how real logistics systems respond to disruptions in real time.</p>
@@ -1985,15 +2058,18 @@
           </div>
           
           <div class="tile-foot">
-            <span class="tile-badge">Automation Project · relay.app · Telegram API</span>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+              <span class="tile-badge completed">Completed</span>
+              <span class="tile-badge">Automation Project · relay.app · Telegram API</span>
+            </div>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
               <a href="./sc tower/Walkthrough.pdf" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Walkthrough ↗</a>
-              <button class="item-link view-cred-btn" data-imgs="./sc tower/1.png,./sc tower/2.png,./sc tower/3.png,sc tower/mockup.png,./sc tower/4.png,./sc tower/5.png" data-carousel="true" style="margin-top:0;">Screenshots ↗</button>
+              <button class="item-link view-cred-btn" data-imgs="./sc tower/1.png,./sc tower/2.png,./sc tower/3.png,./sc tower/mockup.png,./sc tower/4.png,./sc tower/5.png" data-carousel="true" style="margin-top:0;">Screenshots ↗</button>
             </div>
           </div>
         </div>
 
-        <div class="bento-tile span3 reveal-me" style="--rd:240ms">
+        <div class="bento-tile span3 reveal-me" style="--rd:280ms">
           <span class="tile-tag">Advanced Excel · Forecasting · Inventory Analytics</span>
           <p class="tile-title">Retail Demand Forecasting &amp; Inventory Analytics System | Advanced Excel Project</p>
           <p class="tile-desc">An end-to-end retail analytics project using Microsoft Excel, transforming raw Walmart sales data into an interactive decision-support tool.</p>
@@ -2013,7 +2089,10 @@
             <button class="item-link project-read-more-btn" aria-expanded="false" aria-controls="walmart-expand">Read more ↓</button>
           </div>
           <div class="tile-foot">
-            <span class="tile-badge">Excel Project · Retail Analytics · Walmart Dataset</span>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+              <span class="tile-badge completed">Completed</span>
+              <span class="tile-badge">Excel Project · Retail Analytics · Walmart Dataset</span>
+            </div>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
               <a href="https://github.com/ramida2003/Portfolio/tree/main/wallmart/walmart-recruiting-store-sales-forecasting" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Dataset ↗</a>
               <a href="https://drive.google.com/drive/folders/1YYYvfm8aGovd-PjhX7cDQWuj0rJtHLbC?usp=sharing" target="_blank" rel="noopener" class="item-link" style="margin-top:0;">Excel file ↗</a>
