@@ -869,6 +869,7 @@
     #projects .project-card[data-project-order="5"] { order: 5; }
     #projects .project-card[data-project-order="6"] { order: 6; }
     #projects .project-card[data-project-order="7"] { order: 7; }
+    #projects .project-card[data-project-order="8"] { order: 8; }
 
     [data-theme="dark"] .timeline-list::before {
       background: linear-gradient(to bottom, #65c5dd, rgba(101,197,221,0.18));
@@ -893,8 +894,11 @@
       align-items: center;
       gap: 0.8rem 1rem;
     }
-    .timeline-card-summary-title {
+    .timeline-card-summary-heading {
       grid-area: title;
+      min-width: 0;
+    }
+    .timeline-card-summary-title {
       margin: 0;
       color: var(--t1);
       font-size: 1rem;
@@ -1112,6 +1116,48 @@
       bottom: 1.25rem;
     }
 
+    .industry-carousel {
+      position: relative;
+    }
+    .industry-carousel-viewport {
+      position: relative;
+      isolation: isolate;
+    }
+    .industry-carousel-viewport::before,
+    .industry-carousel-viewport::after,
+    .industry-carousel-viewport > .industry-carousel-edge-blur {
+      content: '';
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      bottom: 1.25rem;
+      pointer-events: none;
+    }
+    .industry-carousel-viewport::before,
+    .industry-carousel-viewport::after { width: clamp(28px, 4vw, 64px); }
+    .industry-carousel-viewport::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg), transparent);
+    }
+    .industry-carousel-viewport::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg), transparent);
+    }
+    .industry-carousel-viewport > .industry-carousel-edge-blur {
+      z-index: 3;
+      width: clamp(44px, 6vw, 88px);
+      background: linear-gradient(to right, var(--bg), transparent);
+      opacity: 0.2;
+      -webkit-mask-image: linear-gradient(to right, #000, transparent);
+      mask-image: linear-gradient(to right, #000, transparent);
+    }
+    .industry-carousel-viewport > .industry-carousel-edge-blur-left {
+      left: 0;
+    }
+    .industry-carousel-viewport > .industry-carousel-edge-blur-right {
+      right: 0;
+      transform: scaleX(-1);
+    }
     .industry-carousel-controls {
       display: flex;
       align-items: center;
@@ -1119,12 +1165,31 @@
       gap: 0.75rem;
       margin: 0.25rem 0 1rem;
     }
+    @media (min-width: 681px) {
+      .industry-carousel-controls {
+        position: absolute;
+        z-index: 4;
+        top: 50%;
+        right: 0;
+        left: 0;
+        justify-content: space-between;
+        margin: 0;
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+      .industry-carousel-controls > * { pointer-events: auto; }
+    }
     .industry-carousel-count {
       min-width: 3.2rem;
       color: var(--t3);
       font-size: 0.78rem;
       font-variant-numeric: tabular-nums;
       text-align: center;
+    }
+    .industry-carousel-pagination {
+      display: flex;
+      justify-content: center;
+      margin: 0.1rem 0 0;
     }
     .industry-carousel-arrow {
       display: grid;
@@ -1151,10 +1216,13 @@
       gap: 16px;
       overflow-x: auto;
       padding: 4px 2px 1.25rem;
+      padding-left: clamp(104px, 8vw, 120px);
+      scroll-padding-left: clamp(104px, 8vw, 120px);
       scroll-behavior: smooth;
-      scroll-snap-type: x mandatory;
+      scroll-snap-type: x proximity;
       scrollbar-width: none;
       overscroll-behavior-x: contain;
+      touch-action: pan-x pan-y;
     }
     .industry-carousel-track::-webkit-scrollbar { display: none; }
     #industry-engagement .engagement-card {
@@ -1170,8 +1238,7 @@
       background: var(--glass-bg);
       box-shadow: var(--shadow);
       scroll-snap-align: start;
-      scroll-snap-stop: always;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
     #industry-engagement .engagement-card:hover {
       transform: translateY(-2px);
@@ -1194,10 +1261,31 @@
     #industry-engagement .engagement-card .item-title {
       font-size: 1.12rem;
     }
+    @media (min-width: 1100px) {
+      #industry-engagement .industry-carousel {
+        width: min(calc(100vw - 64px), 1680px);
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      #industry-engagement .engagement-card {
+        flex-basis: clamp(380px, 36vw, 520px);
+      }
+    }
     @media (max-width: 680px) {
       #industry-engagement .engagement-card {
         flex-basis: min(84vw, 390px);
         padding: 1.15rem;
+      }
+      .industry-carousel-track {
+        padding-left: 50px;
+        scroll-padding-left: 50px;
+      }
+      .industry-carousel-viewport::before,
+      .industry-carousel-viewport::after {
+        width: 22px;
+      }
+      .industry-carousel-viewport > .industry-carousel-edge-blur {
+        width: 38px;
       }
       .industry-carousel-controls { margin-bottom: 0.75rem; }
     }
@@ -2197,7 +2285,7 @@
     .hero-eyebrow-mark { width: 8px; height: 8px; border-radius: 50%; background: #1686a5; }
     [data-theme="dark"] .hero-eyebrow-mark { background: #65c5dd; }
     .hero-name {
-      max-width: 9.5ch;
+      max-width: 13ch;
       margin: 0 0 1.2rem;
       color: #102744;
       font-size: clamp(3.5rem, 6.4vw, 6.7rem);
@@ -2377,7 +2465,7 @@
     @media (max-width: 900px) {
       .hero { padding-right: 2.25rem; padding-left: 2.25rem; gap: 2rem; grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr); }
       .hero-topline { left: 2.25rem; }
-      .hero-name { font-size: clamp(3.1rem, 6.4vw, 4.7rem); }
+      .hero-name { max-width: none; font-size: clamp(2.4rem, 5.5vw, 4.2rem); }
       .hero-pic { min-height: 360px; height: min(62svh, 570px); }
       .hero .scroll-hint { left: 2.25rem; }
     }
@@ -2394,7 +2482,7 @@
       .hero-topline { top: 20px; left: 1.5rem; }
       .hero-copy { padding: 0; }
       .hero-eyebrow { margin-bottom: 1.2rem; font-size: 0.62rem; }
-      .hero-name { max-width: 10ch; margin-bottom: 0.9rem; font-size: clamp(3.15rem, 13vw, 5rem); }
+      .hero-name { max-width: none; margin-bottom: 0.9rem; font-size: clamp(2.4rem, 11.8vw, 4.4rem); }
       .hero-alias { margin-bottom: 1.1rem; font-size: 0.78rem; }
       .hero-role { margin-bottom: 0.7rem; font-size: 1.08rem; }
       .hero-sub { margin-bottom: 1.5rem; font-size: 0.9rem; }
@@ -2603,7 +2691,7 @@
         <li><a href="#certifications">Certifications</a></li>
         <li><a href="#volunteering">Volunteering</a></li>
         <li><a href="#writing">Writing</a></li>
-        <li><a href="#industry-engagement">Industry Engagement</a></li>
+        <li><a href="#industry-engagement">Engagement</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
       <div class="nav-actions">
@@ -2627,7 +2715,7 @@
     <a href="#certifications" class="mobile-link">Certifications</a>
     <a href="#volunteering" class="mobile-link">Volunteering</a>
     <a href="#writing" class="mobile-link">Writing</a>
-    <a href="#industry-engagement" class="mobile-link">Industry Engagement</a>
+    <a href="#industry-engagement" class="mobile-link">Engagement</a>
     <a href="#contact" class="mobile-link">Contact</a>
     <a href="cv_ramida.pdf" download class="mobile-link cv-btn-sm">Download CV</a>
   </div>
@@ -2676,7 +2764,7 @@
     </svg>
     <div class="hero-copy">
       <span class="hero-eyebrow"><span class="hero-eyebrow-mark"></span> Supply chain · Operations · Analytics</span>
-      <h1 class="hero-name" id="hero-name">Make the moving parts work better.</h1>
+      <h1 class="hero-name" id="hero-name">Ramida Liyana Gamage</h1>
       <p class="hero-alias">Transport Management &amp; Logistics Engineering · Colombo, Sri Lanka</p>
       <p class="hero-role"><span class="typewriter-text" id="typewriter">I make complex operations work better.</span><span class="typewriter-cursor"></span></p>
       <p class="hero-sub">I bring engineering, analytics and financial thinking together to make supply chains and everyday workflows work smarter.</p>
@@ -2883,7 +2971,7 @@
         </div>
 
         <!-- Tile 2: Supply Chain Power BI Dashboard — large -->
-        <div class="bento-tile span3 reveal-me project-card" data-project-order="5" data-project-date="Jun 2026" style="--rd:80ms">
+        <div class="bento-tile span3 reveal-me project-card" data-project-order="6" data-project-date="Jun 2026" style="--rd:80ms">
           <span class="tile-tag">Power BI · DAX · Supply Chain Analytics</span>
           <p class="tile-title">Supply Chain Performance &amp; Risk Analytics Dashboard</p>
           <p class="tile-desc">Analyzed <strong>180,520 supply chain transaction records</strong> spanning 2015–2018 across five key dimensions:</p>
@@ -2949,7 +3037,7 @@
         </div>
 
         <!-- Tile 3: Shared Last-Mile Mobility Platform — ongoing -->
-        <div class="bento-tile span3 reveal-me project-card" data-project-order="2" data-project-date="Ongoing" style="--rd:160ms">
+        <div class="bento-tile span3 reveal-me project-card" data-project-order="3" data-project-date="Ongoing" style="--rd:160ms">
           <span class="tile-tag">Systems Engineering · Mobility · Shared Transport</span>
           <p class="tile-title">Shared Last-Mile Mobility Platform</p>
           <p class="tile-desc">Developing a shared mobility concept to improve short-distance transportation by matching passengers travelling to similar destinations and enabling cost-sharing through existing three-wheelers. The project aims to reduce passenger waiting time, improve vehicle occupancy, and provide an affordable and sustainable alternative for last-mile travel.</p>
@@ -2973,7 +3061,7 @@
         </div>
 
         <!-- Tile 7: 3D Apparel & Fashion Warehouse Model -->
-        <div class="bento-tile span3 reveal-me project-card" data-project-order="3" data-project-date="" style="--rd:200ms">
+        <div class="bento-tile span3 reveal-me project-card" data-project-order="4" data-project-date="" style="--rd:200ms">
           <span class="tile-tag">FreeCAD · Warehouse Planning · Logistics Engineering</span>
           <p class="tile-title">3D Apparel &amp; Fashion Warehouse Model</p>
           <p class="tile-desc">Built a 3D FreeCAD model to stress-test a 60 m × 50 m Apparel &amp; Fashion Warehouse concept beyond the 2D layout. The model brings the U-flow to life: two inbound docks feed Receiving &amp; QC, inventory moves through reserve storage and A/B-class picking, and orders pass through consolidation, VAS, packing, and outbound staging to three dispatch docks.</p>
@@ -2993,7 +3081,7 @@
         </div>
 
         <!-- Tile 5: Supply Chain Control Tower — full width -->
-        <div class="bento-tile span3 reveal-me project-card" data-project-order="6" data-project-date="" style="--rd:240ms">
+        <div class="bento-tile span3 reveal-me project-card" data-project-order="7" data-project-date="" style="--rd:240ms">
           <span class="tile-tag">Automation · relay.app · Supply Chain Intelligence</span>
           <p class="tile-title">Supply Chain Control Tower</p>
           <p class="tile-desc">I built an <strong>AI-powered Supply Chain Control Tower</strong> using Google Sheets + Relay.app that simulates how real logistics systems respond to disruptions in real time.</p>
@@ -3023,7 +3111,7 @@
           </div>
         </div>
 
-        <div class="bento-tile span3 reveal-me project-card" data-project-order="4" data-project-date="Jul 2026" style="--rd:280ms">
+        <div class="bento-tile span3 reveal-me project-card" data-project-order="5" data-project-date="Jul 2026" style="--rd:280ms">
           <span class="tile-tag">Advanced Excel · Forecasting · Inventory Analytics</span>
           <p class="tile-title">Retail Demand Forecasting &amp; Inventory Analytics System | Advanced Excel Project</p>
           <p class="tile-desc">An end-to-end retail analytics project using Microsoft Excel, transforming raw Walmart sales data into an interactive decision-support tool.</p>
@@ -3056,7 +3144,7 @@
         </div>
 
         <!-- Tile 8: Empty Container Movement Optimization System — discontinued -->
-        <div class="bento-tile span3 reveal-me project-card" data-project-order="7" data-project-date="Discontinued" style="--rd:360ms">
+        <div class="bento-tile span3 reveal-me project-card" data-project-order="8" data-project-date="Discontinued" style="--rd:360ms">
           <span class="tile-tag">Systems Engineering · Freight · Container Logistics</span>
           <p class="tile-title">Empty Container Movement Optimization System</p>
           <p class="tile-desc">Designing a systems engineering solution to reduce unnecessary empty container movements in freight transportation. The project focuses on improving container utilization through stakeholder coordination, real-time information sharing, and container matching to minimize transportation costs, fuel consumption, and road congestion.</p>
@@ -3076,6 +3164,17 @@
               <span class="tile-badge group">Group Project</span>
             </div>
             <span class="tile-badge">Systems Engineering · Freight</span>
+          </div>
+        </div>
+
+        <div class="bento-tile span3 reveal-me project-card" data-project-order="2" data-project-date="Date to be added" style="--rd:40ms">
+          <span class="tile-tag">IoT Project · Smart Parking</span>
+          <p class="tile-title">Smart 3 bay car park system</p>
+          <p class="tile-desc"><strong>System:</strong> A three-bay parking prototype built with ultrasonic sensors, LED indicators, two servo gates, and an Arduino UNO. It tracks bay occupancy, controls entry based on availability, keeps the exit gate operational when full, and sends data to a laptop over USB serial.</p>
+          <p class="tile-desc"> <strong>My contribution:</strong> Connected the hardware to the digital system by building the Python serial bridge, managing MySQL and PHP data saving, and creating a live dashboard for occupancy, gate activity, and parking history. I also contributed to Arduino programming, telemetry integration, and troubleshooting.</p>
+          <div class="item-actions" style="margin-top:0.45rem; flex-wrap:wrap; gap:0.75rem;">
+            <button class="item-link" type="button" disabled aria-disabled="true" title="Images will be available after the project images are added">Images coming soon</button>
+            <a class="item-link" href="https://ramida2003.github.io/smart_cp/" target="_blank" rel="noopener">Full project ↗</a>
           </div>
         </div>
 
@@ -3163,6 +3262,7 @@
           </div>
           <div class="item-right">
             <span class="item-badge highlight">In Progress</span>
+            <img class="inst-logo" src="./icons/sap.jpg" alt="SAP">
           </div>
         </div>
 
@@ -3177,66 +3277,60 @@
       <h2 class="sec-title reveal-me" style="--rd:60ms">Leadership & Volunteering</h2>
 
       <div class="row-list timeline-list">
-
         <div class="row-item reveal-me" data-sort-date="202504" style="--rd:0ms">
-          <div>
-            <span class="item-label">Project Leader — Atlas Axillia (Hemas Holdings)</span>
-            <p class="item-title">Library Renovation</p>
-            <p class="item-sub" style="margin-bottom:0.3rem;">📍 Walagamba Vidyalaya, Bandarawela</p>
-            <p class="item-sub">Led an 8-member team to fully revitalize a school library in critical condition, collaborating with industry partners Atlas Axilia Co. (Pvt) Ltd, Ceylon Biscuits Limited (Munchee), and Watareka Hardwares to renovate an entire library during 3 site visits.</p>
-
-            <div class="lib-expand-body" id="lib-expand-body" aria-hidden="true">
-              <p class="item-sub" style="margin-top:0.75rem; font-weight:600; color:var(--t1);">Structural &amp; Aesthetic Renovation</p>
-              <ul class="lib-detail-list">
-                <li><span class="lib-detail-dot"></span>Eradicated severe termite infestation and installed a brand-new ceiling from scratch.</li>
-                <li><span class="lib-detail-dot"></span>Erected a structural wall partition to separate the library from an adjacent room, creating a quiet dedicated study environment.</li>
-                <li><span class="lib-detail-dot"></span>Repainted the entire library, restored and painted all internal fixtures and furniture, cleaned and sorted the book collection, and repainted and polished the floors.</li>
-                <li><span class="lib-detail-dot"></span>Installed a new 4-bulb lighting layout to completely brighten the reading space.</li>
-              </ul>
-
-              <p class="item-sub" style="margin-top:0.75rem; font-weight:600; color:var(--t1);">Educational Impact</p>
-              <p class="item-sub">Hosted a specialised STEM educational workshop for students, focusing on preparation and motivation for their Ordinary Level (O/L) examinations.</p>
-
-              <p class="item-sub" style="margin-top:0.75rem; font-weight:600; color:var(--t1);">Corporate Sponsors &amp; Acknowledgements</p>
-              <ul class="lib-detail-list">
-                <li><span class="lib-detail-dot"></span><strong>Atlas Axillia</strong> — LKR 100,000 corporate sponsorship and LKR 20,000 worth of premium stationery.</li>
-                <li><span class="lib-detail-dot"></span><strong>Munchee Biscuits</strong> — Free biscuits for the entire school's student body.</li>
-                <li><span class="lib-detail-dot"></span><strong>Watareka Hardwares</strong> — Donated paint baskets and high-quality paintbrushes to support the physical renovation.</li>
-              </ul>
-            </div>
-
-            <div class="item-actions" style="margin-top:0.7rem;">
-              <button class="item-link lib-read-more-btn" aria-expanded="false" aria-controls="lib-expand-body">Read more ↓</button>
-              <a href="./beyond/Library Renovation.pdf" target="_blank" rel="noopener" class="item-link">Project Report ↗</a>
-              <button class="item-link view-cred-btn" data-imgs="./beyond/beyond 1.png, ./beyond/beyond 2.png, ./beyond/beyond 3.png, ./beyond/beyond 4.png, ./beyond/beyond 5.png" data-carousel="true">View Gallery ↗</button>
-            </div>
-          </div>
+              <div>
+                <span class="item-label">Project Leader — Atlas Axillia (Hemas Holdings)</span>
+                <p class="item-title">Library Renovation</p>
+                <p class="item-sub" style="margin-bottom:0.3rem;">Walagamba Vidyalaya, Bandarawela</p>
+                <p class="item-sub">Led an 8-member team to fully revitalize a school library in critical condition, collaborating with industry partners Atlas Axilia Co. (Pvt) Ltd, Ceylon Biscuits Limited (Munchee), and Watareka Hardwares to renovate an entire library during 3 site visits.</p>
+                <div class="lib-expand-body" id="lib-expand-body" aria-hidden="true">
+                  <p class="item-sub" style="margin-top:0.75rem; font-weight:600; color:var(--t1);">Structural &amp; Aesthetic Renovation</p>
+                  <ul class="lib-detail-list">
+                    <li><span class="lib-detail-dot"></span>Eradicated severe termite infestation and installed a brand-new ceiling from scratch.</li>
+                    <li><span class="lib-detail-dot"></span>Erected a structural wall partition to separate the library from an adjacent room, creating a quiet dedicated study environment.</li>
+                    <li><span class="lib-detail-dot"></span>Repainted the entire library, restored and painted all internal fixtures and furniture, cleaned and sorted the book collection, and repainted and polished the floors.</li>
+                    <li><span class="lib-detail-dot"></span>Installed a new 4-bulb lighting layout to completely brighten the reading space.</li>
+                  </ul>
+                  <p class="item-sub" style="margin-top:0.75rem; font-weight:600; color:var(--t1);">Educational Impact</p>
+                  <p class="item-sub">Hosted a specialised STEM educational workshop for students, focusing on preparation and motivation for their Ordinary Level (O/L) examinations.</p>
+                  <p class="item-sub" style="margin-top:0.75rem; font-weight:600; color:var(--t1);">Corporate Sponsors &amp; Acknowledgements</p>
+                  <ul class="lib-detail-list">
+                    <li><span class="lib-detail-dot"></span><strong>Atlas Axillia</strong> — LKR 100,000 corporate sponsorship and LKR 20,000 worth of premium stationery.</li>
+                    <li><span class="lib-detail-dot"></span><strong>Munchee Biscuits</strong> — Free biscuits for the entire school's student body.</li>
+                    <li><span class="lib-detail-dot"></span><strong>Watareka Hardwares</strong> — Donated paint baskets and high-quality paintbrushes to support the physical renovation.</li>
+                  </ul>
+                </div>
+                <div class="item-actions" style="margin-top:0.7rem;">
+                  <button class="item-link lib-read-more-btn" aria-expanded="false" aria-controls="lib-expand-body">Read more ↓</button>
+                  <a href="./beyond/Library Renovation.pdf" target="_blank" rel="noopener" class="item-link">Project Report ↗</a>
+                  <button class="item-link view-cred-btn" data-imgs="./beyond/beyond 1.png, ./beyond/beyond 2.png, ./beyond/beyond 3.png, ./beyond/beyond 4.png, ./beyond/beyond 5.png" data-carousel="true">View Gallery ↗</button>
+                </div>
+              </div>
           <span class="item-badge">Feb — Apr 2025</span>
         </div>
 
         <div class="row-item reveal-me" data-sort-date="202506" style="--rd:40ms">
-          <div>
-            <span class="item-label">Project Leader — OCTAVE (John Keells Holdings)</span>
-            <p class="item-title">Data Storm v6.0 — National Data Analytics Competition</p>
-            <p class="item-sub">Led a 2-month national data analytics competition as Project Leader, partnered with OCTAVE — a subsidiary of John Keells Holdings. Drove all company-facing meetings, coordinated across multiple internal JKH teams, and managed the full event from planning to execution.</p>
-            <div class="item-actions" style="margin-top:0.7rem;">
-              <button class="item-link view-cred-btn" data-imgs="./data_storm/Data Storm.png" data-carousel="true">View project ↗</button>
-              <a class="item-link" href="./data_storm/Chair%20D%20storm.pdf" target="_blank" style="margin-left:1.2rem;">View verification ↗</a>
-            </div>
-          </div>
+              <div>
+                <span class="item-label">Project Leader — OCTAVE (John Keells Holdings)</span>
+                <p class="item-title">Data Storm v6.0 — National Data Analytics Competition</p>
+                <p class="item-sub">Led a 2-month national data analytics competition as Project Leader, partnered with OCTAVE — a subsidiary of John Keells Holdings. Drove all company-facing meetings, coordinated across multiple internal JKH teams, and managed the full event from planning to execution.</p>
+                <div class="item-actions" style="margin-top:0.7rem;">
+                  <button class="item-link view-cred-btn" data-imgs="./data_storm/Data Storm.png" data-carousel="true">View project ↗</button>
+                  <a class="item-link" href="./data_storm/Chair%20D%20storm.pdf" target="_blank" style="margin-left:1.2rem;">View verification ↗</a>
+                </div>
+              </div>
           <span class="item-badge">Apr — Jun 2025</span>
         </div>
 
         <div class="row-item reveal-me" data-sort-date="999999" style="--rd:80ms">
-          <div>
-            <span class="item-label">Rotaract Club — University of Moratuwa</span>
-            <p class="item-title">Officially Inducted Member</p>
-            <p class="item-sub">Chaired Data Storm v6.0 (national data analytics competition under OCTAVE/JKH). Served on the Organizing Committee for the Induction Ceremony 2025 and Binara Padura. Contributed to Beach Cleanup 1.0 & 2.0 (2025), Zoosanthale coral plantation programme, and the Are You Ready Career Fair. Co-facilitated the Resume Centre 2025 & 2026, supporting fellow undergraduates with CV writing and career readiness. Attended general meetings as an active voting member.</p>
-            <button class="item-link view-cred-btn" data-img="./rota/Inducted.jpeg">View credential ↗</button>
-          </div>
+              <div>
+                <span class="item-label">Rotaract Club — University of Moratuwa</span>
+                <p class="item-title">Officially Inducted Member</p>
+                <p class="item-sub">Chaired Data Storm v6.0 (national data analytics competition under OCTAVE/JKH). Served on the Organizing Committee for the Induction Ceremony 2025 and Binara Padura. Contributed to Beach Cleanup 1.0 &amp; 2.0 (2025), Zoosanthale coral plantation programme, and the Are You Ready Career Fair. Co-facilitated the Resume Centre 2025 &amp; 2026, supporting fellow undergraduates with CV writing and career readiness. Attended general meetings as an active voting member.</p>
+                <button class="item-link view-cred-btn" data-img="./rota/Inducted.jpeg">View credential ↗</button>
+              </div>
           <span class="item-badge">2020 — Present</span>
         </div>
-
       </div>
     </div>
   </section>
@@ -3298,11 +3392,13 @@
           <button class="industry-carousel-arrow" type="button" data-carousel-direction="-1" aria-label="Previous industry event">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
           </button>
-          <span class="industry-carousel-count" aria-live="polite">1 / 6</span>
           <button class="industry-carousel-arrow" type="button" data-carousel-direction="1" aria-label="Next industry event">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
           </button>
         </div>
+        <div class="industry-carousel-viewport">
+        <span class="industry-carousel-edge-blur industry-carousel-edge-blur-left" aria-hidden="true"></span>
+        <span class="industry-carousel-edge-blur industry-carousel-edge-blur-right" aria-hidden="true"></span>
         <div class="industry-carousel-track" id="industry-event-track" tabindex="0" aria-label="Industry engagement events">
         <article class="engagement-card reveal-me" data-sort-date="20260930" style="--rd:0ms">
           <div>
@@ -3382,6 +3478,10 @@
           <div class="item-right"><span class="item-badge">Oct 2025</span></div>
         </article>
       </div>
+        </div>
+        <div class="industry-carousel-pagination">
+          <span class="industry-carousel-count" aria-live="polite">1 / 6</span>
+        </div>
     </div>
   </section>
 
@@ -3597,7 +3697,21 @@
     (function () {
       const el = document.getElementById('hero-name');
       const words = el.textContent.trim().split(/\s+/);
-      el.innerHTML = words.map(w => `<span class="w">${w}</span>`).join(' ');
+      const name = document.createDocumentFragment();
+      words.forEach((word, index) => {
+        if (index === 1) {
+          const lineBreak = document.createElement('br');
+          lineBreak.setAttribute('aria-hidden', 'true');
+          name.appendChild(lineBreak);
+        } else if (index > 1) {
+          name.appendChild(document.createTextNode(' '));
+        }
+        const span = document.createElement('span');
+        span.className = 'w';
+        span.textContent = word;
+        name.appendChild(span);
+      });
+      el.replaceChildren(name);
       el.querySelectorAll('.w').forEach((s, i) => {
         setTimeout(() => s.classList.add('vis'), 420 + i * 140);
       });
@@ -3816,17 +3930,26 @@
       const carousel = track.closest('.industry-carousel');
       const section = document.getElementById('industry-engagement');
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const supportsAutoRotate = window.matchMedia('(hover: hover) and (pointer: fine)');
       let activeIndex = 0;
       let frame = 0;
       let isHovered = false;
       let isFocused = false;
       let isVisible = false;
+      let lastInteraction = 0;
+      let paddingLeft = 0;
+      let cardPositions = [];
 
       cards.sort((a, b) => Number(b.dataset.sortDate) - Number(a.dataset.sortDate));
       cards.forEach((card, index) => {
         card.style.setProperty('--rd', (index * 40) + 'ms');
         track.appendChild(card);
       });
+
+      function measureCards() {
+        paddingLeft = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+        cardPositions = cards.map(card => card.offsetLeft);
+      }
 
       function updateControls() {
         if (counter) counter.textContent = (activeIndex + 1) + ' / ' + cards.length;
@@ -3836,11 +3959,7 @@
 
       function goTo(index) {
         activeIndex = Math.max(0, Math.min(index, cards.length - 1));
-        const trackRect = track.getBoundingClientRect();
-        const cardRect = cards[activeIndex].getBoundingClientRect();
-        const currentLeft = track.scrollLeft;
-        const paddingLeft = parseFloat(getComputedStyle(track).paddingLeft) || 0;
-        const targetLeft = currentLeft + cardRect.left - trackRect.left - track.clientLeft - paddingLeft;
+        const targetLeft = Math.max(0, cardPositions[activeIndex] - paddingLeft);
         track.scrollTo({ left: targetLeft, behavior: 'smooth' });
         updateControls();
       }
@@ -3848,16 +3967,20 @@
       function syncActiveCard() {
         cancelAnimationFrame(frame);
         frame = requestAnimationFrame(() => {
-          const trackStart = track.getBoundingClientRect().left + track.clientLeft + (parseFloat(getComputedStyle(track).paddingLeft) || 0);
-          activeIndex = cards.reduce((nearest, card, index) => {
-            const rect = card.getBoundingClientRect();
-            const nearestRect = cards[nearest].getBoundingClientRect();
-            return Math.abs(rect.left - trackStart) < Math.abs(nearestRect.left - trackStart) ? index : nearest;
-          }, 0);
-          updateControls();
+          const scrollPosition = track.scrollLeft + paddingLeft;
+          let nearest = 0;
+          for (let index = 1; index < cardPositions.length; index += 1) {
+            if (Math.abs(cardPositions[index] - scrollPosition) >= Math.abs(cardPositions[nearest] - scrollPosition)) break;
+            nearest = index;
+          }
+          if (nearest !== activeIndex) {
+            activeIndex = nearest;
+            updateControls();
+          }
         });
       }
 
+      measureCards();
       previous.addEventListener('click', () => goTo(activeIndex - 1));
       next.addEventListener('click', () => goTo(activeIndex + 1));
       track.addEventListener('scroll', syncActiveCard, { passive: true });
@@ -3870,13 +3993,18 @@
           goTo(activeIndex + 1);
         }
       });
-      window.addEventListener('resize', syncActiveCard);
+      window.addEventListener('resize', () => {
+        measureCards();
+        syncActiveCard();
+      }, { passive: true });
       carousel.addEventListener('mouseenter', () => { isHovered = true; });
       carousel.addEventListener('mouseleave', () => { isHovered = false; });
       carousel.addEventListener('focusin', () => { isFocused = true; });
       carousel.addEventListener('focusout', event => {
         if (!carousel.contains(event.relatedTarget)) isFocused = false;
       });
+      carousel.addEventListener('pointerdown', () => { lastInteraction = Date.now(); });
+      carousel.addEventListener('pointerup', () => { lastInteraction = Date.now(); });
       document.addEventListener('visibilitychange', () => {
         if (!document.hidden) syncActiveCard();
       });
@@ -3887,9 +4015,9 @@
       visibilityObserver.observe(section);
 
       window.setInterval(() => {
-        if (document.hidden || !isVisible || isHovered || isFocused || reducedMotion.matches) return;
+        if (!supportsAutoRotate.matches || document.hidden || !isVisible || isHovered || isFocused || reducedMotion.matches || Date.now() - lastInteraction < 5000) return;
         goTo((activeIndex + 1) % cards.length);
-      }, 3000);
+      }, 5000);
 
       updateControls();
     })();
@@ -4219,11 +4347,10 @@
         });
       });
 
-      document.querySelectorAll('#volunteering .row-list').forEach(list => {
-        const cards = Array.from(list.querySelectorAll(':scope > .row-item'));
-        cards.sort((a, b) => Number(b.dataset.sortDate || 0) - Number(a.dataset.sortDate || 0));
+      const volunteeringList = document.querySelector('#volunteering .row-list');
+      if (volunteeringList) {
+        const cards = Array.from(volunteeringList.querySelectorAll(':scope > .row-item'));
         cards.forEach((card, index) => {
-          list.appendChild(card);
           card.style.setProperty('--rd', (index * 40) + 'ms');
           const title = card.querySelector('.item-title');
           if (!title) return;
@@ -4232,25 +4359,21 @@
           const summary = document.createElement('div');
           summary.className = 'timeline-card-summary';
 
+          const heading = document.createElement('div');
+          heading.className = 'timeline-card-summary-heading';
           const summaryTitle = title.cloneNode(true);
           summaryTitle.classList.add('timeline-card-summary-title');
           summaryTitle.removeAttribute('id');
           title.classList.add('timeline-source-title');
-          if (list.closest('section').id === 'experience') {
-            const identity = document.createElement('div');
-            identity.className = 'timeline-card-identity';
-            const company = card.querySelector('.item-label');
-            if (company) {
-              const summaryCompany = document.createElement('span');
-              summaryCompany.className = 'timeline-card-summary-company';
-              summaryCompany.textContent = company.textContent.trim();
-              identity.appendChild(summaryCompany);
-            }
-            identity.appendChild(summaryTitle);
-            summary.appendChild(identity);
-          } else {
-            summary.appendChild(summaryTitle);
+          heading.appendChild(summaryTitle);
+
+          const organization = card.querySelector('.item-label');
+          if (organization) {
+            const summaryOrganization = organization.cloneNode(true);
+            summaryOrganization.className = 'timeline-card-summary-company';
+            heading.appendChild(summaryOrganization);
           }
+          summary.appendChild(heading);
 
           const date = document.createElement('span');
           date.className = 'timeline-card-date';
@@ -4260,7 +4383,7 @@
 
           const details = document.createElement('div');
           details.className = 'timeline-card-details';
-          details.id = list.closest('section').id + '-card-' + (index + 1) + '-details';
+          details.id = 'volunteering-card-' + (index + 1) + '-details';
           details.setAttribute('aria-hidden', 'true');
           details.inert = true;
 
@@ -4303,7 +4426,7 @@
             }
           });
         });
-      });
+      }
 
       function setExpandedDetails(card, isOpen) {
         card.querySelectorAll('.project-expand-body').forEach(body => {
